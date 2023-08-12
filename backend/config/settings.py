@@ -44,6 +44,7 @@ SYSTEM_APPS = [
 
 CUSTOM_APPS = [
     "users.apps.UsersConfig",
+    "gpt_sys_infos.apps.GPTSysInfosConfig",
 ]
 
 THRID_PARTY_APPS = [
