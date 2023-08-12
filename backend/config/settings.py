@@ -143,5 +143,7 @@ AUTH_USER_MODEL = "users.User"
 REST_FRAMEWORK = {
     "DEFAULT_AUTHENTICATION_CLASSES": [
         "config.authentication.JWTAuthentication",
-    ]
+    ],
+    "DEFAULT_PAGINATION_CLASS": "rest_framework.pagination.PageNumberPagination",
+    "PAGE_SIZE": 6,
 }
