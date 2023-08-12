@@ -13,6 +13,11 @@ class SystemInfo(models.Model):
         ("ko", "Korean"),
     ]
 
+    description = models.CharField(
+        max_length=50,
+        default="No Description",
+    )
+
     user = models.ForeignKey(
         "users.User",
         on_delete=models.CASCADE,

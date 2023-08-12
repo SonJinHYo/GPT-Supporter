@@ -3,8 +3,10 @@ from rest_framework import status
 from rest_framework import exceptions
 from rest_framework.response import Response
 from django.contrib.auth import authenticate
+from rest_framework.permissions import IsAuthenticated
 
 from django.conf import settings
+
 from . import serializers
 
 import jwt
@@ -96,3 +98,25 @@ class SignIn(APIView):
                 {"error": "유효하지 않은 닉네임과 패스워드 조합입니다."},
                 status=status.HTTP_400_BAD_REQUEST,
             )
+
+
+class Me(APIView):
+    permission_classes = [IsAuthenticated]
+
+    def get(self, reqest):
+        user = reqest.user
+        serializer = serializers.UserPrivateSerializer(user)
+        return Response(
+            serializer.data,
+            status=status.HTTP_200_OK,
+        )
+
+    def put(self, request):
+        user = request.user
+        serializer = serializers.UserPrivateSerializer(
+            user,
+            data=request.data,
+            partial=True,
+        )
+        if serializer.is_valid():
+            return Response(status=status.HTTP_200_OK)

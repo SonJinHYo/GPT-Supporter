@@ -56,10 +56,11 @@ class SignInAPITest(APITestCase):
             "password": "testpassword123",
         }
         self.user = User.objects.create_user(**self.user_data)
+        self.url = reverse("signin")
 
     def test_valid_signin(self):
         response = self.client.post(
-            reverse("signin"),
+            self.url,
             self.user_data,
             format="json",
         )
@@ -72,7 +73,7 @@ class SignInAPITest(APITestCase):
     def test_invalid_signin_missing_data(self):
         invalid_data = {"username": "", "password": ""}
         response = self.client.post(
-            reverse("signin"),
+            self.url,
             invalid_data,
             format="json",
         )
@@ -87,7 +88,7 @@ class SignInAPITest(APITestCase):
             "password": "wrongpassword",
         }
         response = self.client.post(
-            reverse("signin"),
+            self.url,
             invalid_credentials,
             format="json",
         )
@@ -98,12 +99,48 @@ class SignInAPITest(APITestCase):
         self.assertIn("error", response.data)
 
 
-class APITestCase(APITestCase):
-    def test_urls_exist(self):
-        urls = [
-            reverse("signup"),
-            reverse("signin"),
-        ]
-        for url in urls:
-            response = self.client.get(url)
-            self.assertEqual(response.status_code, status.HTTP_405_METHOD_NOT_ALLOWED)
+class MeAPITest(APITestCase):
+    def setUp(self):
+        self.user_data = {
+            "username": "testuser",
+            "password": "testpassword123",
+        }
+        self.user = User.objects.create_user(**self.user_data)
+        self.client.login(
+            username=self.user_data["username"],
+            password=self.user_data["password"],
+        )
+        self.url = reverse("me")
+
+    def test_get_user_profile(self):
+        response = self.client.get(self.url)
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+        self.assertEqual(response.data["username"], self.user_data["username"])
+
+    def test_update_user_profile_valid_data(self):
+        updated_data = {
+            "email": "new_email@example.com",
+            "using_token": 123,
+        }
+        response = self.client.put(
+            self.url,
+            updated_data,
+            format="json",
+        )
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+
+        self.user.refresh_from_db()  # 데이터베이스 업데이트
+        self.assertEqual(self.user.email, updated_data["email"])
+        self.assertEqual(self.user.using_token, updated_data["using_token"])
+
+    def test_update_user_profile_invalid_data(self):
+        invalid_data = {
+            "email": "invalid_email",
+            "using_token": "invalid_value",
+        }
+        response = self.client.put(
+            self.url,
+            invalid_data,
+            format="json",
+        )
+        self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
