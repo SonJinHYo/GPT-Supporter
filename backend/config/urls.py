@@ -21,4 +21,5 @@ urlpatterns = [
     path("admin/", admin.site.urls),
     path("api/v1/users/", include("users.urls")),
     path("api/v1/gpt-sys-infos/", include("gpt_sys_infos.urls")),
+    path("api/v1/chatrooms/", include("chatrooms.urls")),
 ]
