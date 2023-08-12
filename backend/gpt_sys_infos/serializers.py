@@ -40,3 +40,48 @@ class ListSystemInfoSerializer(ModelSerializer):
         return ", ".join(
             [ref_data.title for ref_data in system_info_obj.ref_datas.all()]
         )
+
+
+class SystemInfoDetailSerializer(ModelSerializer):
+    ref_books = SerializerMethodField()
+    ref_datas = SerializerMethodField()
+
+    class Meta:
+        model = SystemInfo
+        fields = (
+            "description",
+            "user",
+            "language",
+            "major",
+            "understanding_level",
+            "only_use_reference_data",
+            "ref_books",
+            "ref_datas",
+        )
+
+    def get_ref_books(self, system_info_obj):
+        books = system_info_obj.ref_books.all()
+        books_list = []
+
+        for book in books:
+            data = {
+                "author": book.author,
+                "title": book.title,
+            }
+            books_list.append(data)
+
+        return books_list
+
+    def get_ref_datas(self, system_info_obj):
+        datas = system_info_obj.ref_datas.all()
+        data_list = []
+
+        for data in datas:
+            text = data.content.text
+            if len(text) > 200:
+                text = text[:200] + "..."
+
+            data = {"title": data.title, "text": text}
+            data_list.append(data)
+
+        return data_list
