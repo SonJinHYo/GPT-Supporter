@@ -2,7 +2,7 @@ from rest_framework.serializers import ModelSerializer, SerializerMethodField
 from .models import SystemInfo
 
 
-class SysInfoCreateSerializer(ModelSerializer):
+class CreateSystemInfoSerializer(ModelSerializer):
     class Meta:
         model = SystemInfo
         fields = (
@@ -14,7 +14,7 @@ class SysInfoCreateSerializer(ModelSerializer):
         )
 
 
-class ListSysInfoSerializer(ModelSerializer):
+class ListSystemInfoSerializer(ModelSerializer):
     ref_book_title = SerializerMethodField()
     ref_data_title = SerializerMethodField()
 

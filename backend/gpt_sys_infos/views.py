@@ -14,11 +14,11 @@ from gpt_sys_infos.models import SystemInfo
 from . import serializers
 
 
-class CreateSysInfo(APIView):
+class CreateSystemInfo(APIView):
     permission_classes = [IsAuthenticated]
 
     def post(self, request):
-        serializer = serializers.SysInfoCreateSerializer(data=request.data)
+        serializer = serializers.CreateSystemInfoSerializer(data=request.data)
         if serializer.is_valid():
             serializer.save(user=request.user)
             return Response(status=status.HTTP_201_CREATED)
@@ -26,7 +26,7 @@ class CreateSysInfo(APIView):
             return Response(status=status.HTTP_400_BAD_REQUEST)
 
 
-class SysInfosList(APIView):
+class SystemInfosList(APIView):
     permission_classes = [IsAuthenticated]
     queryset = SystemInfo.objects.all()
 
@@ -37,7 +37,7 @@ class SysInfosList(APIView):
             request,
         )
 
-        serializer = serializers.ListSysInfoSerializer(
+        serializer = serializers.ListSystemInfoSerializer(
             paginated_system_infos,
             many=True,
         )
