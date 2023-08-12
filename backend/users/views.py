@@ -43,3 +43,56 @@ class SignUp(APIView):
                 {"message": "회원가입 실패. 이미 존재하는 닉네임입니다. 또는 패스워드(8자 이상), 이메일 형식을 확인해주세요."},
                 status=status.HTTP_400_BAD_REQUEST,
             )
+
+
+class SignIn(APIView):
+    """jwt로그인 APIView"""
+
+    def generate_token(self, user):
+        """토큰 발행 함수
+
+        Args:
+            user (models.User): 인증된 유저 객체
+
+        Returns:
+            token (str): jwt토큰
+        """
+        payload = {"pk": user.pk}
+        key = settings.SECRET_KEY
+        token = jwt.encode(payload=payload, key=key, algorithm="HS256")
+        return token
+
+    def post(self, request):
+        """jwt로그인 요청 처리 함수
+
+        Parameters:
+            email (str) : 로그인 email
+            password (str) : 로그인 password
+
+        Raises:
+            exceptions.ParseError: email,password 누락으로 로그인 실패시 에러
+
+        Returns:
+            Response : jwt토큰 또는 오류 응답
+        """
+
+        username = request.data.get("username")
+        password = request.data.get("password")
+
+        if not username or not password:
+            raise exceptions.ParseError()
+
+        user = authenticate(
+            request,
+            username=username,
+            password=password,
+        )
+
+        if user:
+            token = self.generate_token(user)
+            return Response({"token": token}, status=status.HTTP_200_OK)
+        else:
+            return Response(
+                {"error": "유효하지 않은 닉네임과 패스워드 조합입니다."},
+                status=status.HTTP_400_BAD_REQUEST,
+            )
