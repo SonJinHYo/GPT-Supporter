@@ -1,5 +1,5 @@
 from rest_framework.serializers import ModelSerializer, SerializerMethodField
-from .models import RefBook, SystemInfo
+from .models import Content, RefBook, RefData, SystemInfo
 
 
 class CreateSystemInfoSerializer(ModelSerializer):
@@ -102,3 +102,27 @@ class RefBookListSerializer(ModelSerializer):
         "author",
         "title",
     )
+
+
+class CreateRefDataSerializer(ModelSerializer):
+    model = RefData
+    fields = ("title",)
+
+
+class RefDataContentSerializer(ModelSerializer):
+    model = Content
+    fields = ("text",)
+
+
+class RefDataListSerializer(ModelSerializer):
+    text = SerializerMethodField()
+
+    model = RefData
+    fields = (
+        "pk",
+        "title",
+        "text",
+    )
+
+    def get_text(self, ref_data_object):
+        return ref_data_object.content.text

@@ -7,6 +7,43 @@ from users.models import User
 from .models import SystemInfo
 
 
+from django.urls import reverse
+from rest_framework import status
+from rest_framework.test import APITestCase
+from django.contrib.auth import get_user_model
+from .models import RefBook
+from .serializers import CreateRefBookSerializer
+
+
+class CreateRefBookTestCase(APITestCase):
+    def setUp(self):
+        self.user = User.objects.create_user(
+            username="testuser", password="testpassword"
+        )
+        self.url = reverse("create-refbook")  # 해당 URL 생성
+
+    def test_create_ref_book(self):
+        self.client.force_authenticate(user=self.user)  # 인증된 사용자로 설정
+        data = {"author": "Test Author", "title": "Test Title"}
+        response = self.client.post(self.url, data)
+
+        self.assertEqual(response.status_code, status.HTTP_201_CREATED)
+        self.assertEqual(RefBook.objects.count(), 1)
+        self.assertEqual(RefBook.objects.first().author, data["author"])
+        self.assertEqual(RefBook.objects.first().title, data["title"])
+
+    def test_create_ref_book_invalid_data(self):
+        self.client.force_authenticate(user=self.user)
+        invalid_data = {
+            "author": "Test Author",
+            # "title": "Test Title"  # title 필드가 누락된 무효한 데이터
+        }
+        response = self.client.post(self.url, invalid_data)
+
+        self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
+        self.assertEqual(RefBook.objects.count(), 0)  # 무효한 데이터로 인해 생성되지 않아야 함
+
+
 class CreateSysInfoTest(APITestCase):
     def setUp(self):
         self.user = User.objects.create_user(

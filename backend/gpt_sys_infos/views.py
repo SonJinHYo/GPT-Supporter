@@ -118,7 +118,10 @@ class SystemInfoDetail(APIView):
                 status=status.HTTP_200_OK,
             )
         else:
-            return update_system_info.errors
+            return Response(
+                update_system_info.errors,
+                status=status.HTTP_400_BAD_REQUEST,
+            )
 
     def delete(self, request, pk):
         system_info = self.get_object(pk)
@@ -134,7 +137,10 @@ class CreateRefBook(APIView):
         if serializer.is_valid():
             return Response(status=status.HTTP_201_CREATED)
         else:
-            return serializer.errors
+            return Response(
+                serializer.errors,
+                status=status.HTTP_400_BAD_REQUEST,
+            )
 
 
 class RefBooksList(APIView):
@@ -177,9 +183,87 @@ class RefBookDetail(APIView):
             serializer.save()
             return Response(status=status.HTTP_200_OK)
         else:
-            return serializer.errors
+            return Response(
+                serializer.errors,
+                status=status.HTTP_400_BAD_REQUEST,
+            )
 
     def delete(self, request, pk):
         ref_book = self.get_object(pk)
         ref_book.delete()
+        return Response(status=status.HTTP_204_NO_CONTENT)
+
+
+class CreateRefData(APIView):
+    permission_classes = [IsAuthenticated]
+
+    def post(self, request):
+        ref_data_serializer = serializers.CreateRefDataSerializer(data=request.data)
+        content_serializer = serializers.RefDataContentSerializer(data=request.data)
+
+        if not ref_data_serializer.is_valid():
+            return Response(
+                ref_data_serializer.errors,
+                status=status.HTTP_400_BAD_REQUEST,
+            )
+        if not content_serializer.is_valid():
+            return Response(
+                content_serializer.errors,
+                status=status.HTTP_400_BAD_REQUEST,
+            )
+
+        new_ref_data = ref_data_serializer.save()
+        content_serializer.save(data=new_ref_data)
+
+        return Response(status=status.HTTP_201_CREATED)
+
+
+class RefDatasList(APIView):
+    permission_classes = [IsAuthenticated]
+    queryset = RefData.objects.all()
+
+    def get(self, request):
+        pagination = PageNumberPagination()
+        paginated_ref_datas = pagination.paginate_queryset(
+            self.queryset,
+            request,
+        )
+
+        serializer = serializers.RefDataListSerializer(
+            paginated_ref_datas,
+            many=True,
+        )
+
+        return Response(
+            serializer.data,
+            status=status.HTTP_200_OK,
+        )
+
+
+class RefDataDetail(APIView):
+    def get_object(self, pk):
+        try:
+            return RefData.objects.get(pk=pk)
+        except:
+            raise exceptions.NotFound()
+
+    def put(self, request, pk):
+        ref_data = self.get_object(pk)
+        serializer = serializers.RefDataListSerializer(
+            ref_data,
+            data=request.data,
+            partial=True,
+        )
+        if serializer.is_valid():
+            serializer.save()
+            return Response(status=status.HTTP_200_OK)
+        else:
+            return Response(
+                serializer.errors,
+                status=status.HTTP_400_BAD_REQUEST,
+            )
+
+    def delete(self, request, pk):
+        ref_data = self.get_object(pk)
+        ref_data.delete()
         return Response(status=status.HTTP_204_NO_CONTENT)

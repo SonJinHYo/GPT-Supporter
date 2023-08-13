@@ -24,7 +24,10 @@ class SystemInfo(models.Model):
         related_name="system_infos",
     )
     language = models.CharField(max_length=2, choices=LANGUAGES)
-    major = models.CharField(max_length=20)
+    major = models.CharField(
+        max_length=20,
+        default=None,
+    )
     understanding_level = models.PositiveIntegerField(
         validators=[
             MinValueValidator(0, message="대학교 기준입니다. 1~5학년을 선택해주세요"),
@@ -63,4 +66,4 @@ class Content(models.Model):
         on_delete=models.CASCADE,
         related_name="content",
     )
-    text = models.TextField(max_length=2000)
+    text = models.TextField(max_length=3000)
