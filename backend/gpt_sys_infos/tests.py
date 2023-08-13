@@ -5,7 +5,7 @@ from django.conf import settings
 from rest_framework.test import APITestCase
 from rest_framework import status
 from users.models import User
-from .models import RefData, SystemInfo
+from .models import Content, RefData, SystemInfo
 
 
 from django.urls import reverse
@@ -300,3 +300,78 @@ class SystemInfosListTestCase(APITestCase):
                 self.assertEqual(len(response.data), self.page_size)
             else:
                 self.assertEqual(len(response.data), self.rem_page)
+
+
+class SystemInfoDetailTestCase(APITestCase):
+    def setUp(self):
+        self.user = User.objects.create_user(
+            username="testuser", password="testpassword"
+        )
+        self.ref_book = RefBook.objects.create(
+            user=self.user, author="Test Author", title="Test Title"
+        )
+        self.ref_data = RefData.objects.create(user=self.user, title="Test Title")
+        self.ref_data_content = Content.objects.create(
+            data=self.ref_data, text="Test Text"
+        )
+        self.system_info = SystemInfo.objects.create(
+            description="Test Description",
+            language="en",
+            major="Computer Science",
+            understanding_level=3,
+            only_use_reference_data=True,
+            user=self.user,
+        )
+        self.system_info.ref_books.add(self.ref_book)
+        self.system_info.ref_datas.add(self.ref_data)
+        self.url = reverse("detail", kwargs={"pk": self.system_info.pk})
+        self.client.force_authenticate(user=self.user)
+
+    def test_get_system_info(self):
+        response = self.client.get(self.url)
+
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+        self.assertEqual(response.data["description"], self.system_info.description)
+        self.assertEqual(response.data["language"], self.system_info.language)
+        self.assertEqual(response.data["major"], self.system_info.major)
+        self.assertEqual(
+            response.data["understanding_level"], self.system_info.understanding_level
+        )
+        self.assertEqual(
+            response.data["only_use_reference_data"],
+            self.system_info.only_use_reference_data,
+        )
+        self.assertEqual(response.data["ref_books"][0]["title"], self.ref_book.title)
+        self.assertEqual(response.data["ref_datas"][0]["title"], self.ref_data.title)
+
+    def test_update_system_info(self):
+        updated_data = {
+            "description": "Updated Description",
+            "language": "ko",
+            "major": "Electrical Engineering",
+            "understanding_level": 4,
+            "only_use_reference_data": False,
+            "ref_books_pk": json.dumps([]),  # 빈 리스트로 업데이트
+            "ref_datas_pk": json.dumps([self.ref_data.pk]),  # 기존 RefData 유지, RefBook 제거
+        }
+        response = self.client.put(self.url, updated_data)
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+        self.system_info.refresh_from_db()  # 데이터베이스에서 최신 정보로 업데이트
+        self.assertEqual(self.system_info.description, updated_data["description"])
+        self.assertEqual(self.system_info.language, updated_data["language"])
+        self.assertEqual(self.system_info.major, updated_data["major"])
+        self.assertEqual(
+            self.system_info.understanding_level, updated_data["understanding_level"]
+        )
+        self.assertEqual(
+            self.system_info.only_use_reference_data,
+            updated_data["only_use_reference_data"],
+        )
+        self.assertEqual(self.system_info.ref_books.count(), 0)  # RefBook이 제거되었으므로 0
+        self.assertEqual(self.system_info.ref_datas.first(), self.ref_data)
+
+    def test_delete_system_info(self):
+        response = self.client.delete(self.url)
+
+        self.assertEqual(response.status_code, status.HTTP_204_NO_CONTENT)
+        self.assertFalse(SystemInfo.objects.filter(pk=self.system_info.pk).exists())

@@ -25,7 +25,7 @@ class SystemInfo(models.Model):
     )
     language = models.CharField(max_length=2, choices=LANGUAGES)
     major = models.CharField(
-        max_length=20,
+        max_length=50,
         default=None,
     )
     understanding_level = models.PositiveIntegerField(
