@@ -22,30 +22,29 @@ class CreateSystemInfo(APIView):
 
     def post(self, request):
         serializer = serializers.CreateSystemInfoSerializer(data=request.data)
-        if serializer.is_valid():
-            with transaction.atomic():
-                new_system_info = serializer.save(user=request.user)
-                for field_name in ["ref_books_pk", "ref_datas_pk"]:
-                    if field_name in request.data:
-                        try:
-                            pk_list = json.loads(request.data[field_name])
-                            related_model = (
-                                RefBook if field_name == "ref_books_pk" else RefData
-                            )
-                            related_objects = [
-                                related_model.objects.get(pk=pk) for pk in pk_list
-                            ]
-                            getattr(new_system_info, field_name.replace("_pk", "")).set(
-                                related_objects
-                            )
-                        except:
-                            raise exceptions.ParseError(
-                                f"참조 {related_model.__name__} 에러"
-                            )
+
+        if not serializer.is_valid():
+            return Response(status=status.HTTP_400_BAD_REQUEST)
+
+        with transaction.atomic():
+            new_system_info = serializer.save(user=request.user)
+            for field_name in ["ref_books_pk", "ref_datas_pk"]:
+                if field_name in request.data:
+                    try:
+                        pk_list = json.loads(request.data[field_name])
+                        related_model = (
+                            RefBook if field_name == "ref_books_pk" else RefData
+                        )
+                        related_objects = [
+                            related_model.objects.get(pk=pk) for pk in pk_list
+                        ]
+                        getattr(new_system_info, field_name.replace("_pk", "")).set(
+                            related_objects
+                        )
+                    except:
+                        raise exceptions.ParseError(f"참조 {related_model.__name__} 에러")
 
             return Response(status=status.HTTP_201_CREATED)
-        else:
-            return Response(status=status.HTTP_400_BAD_REQUEST)
 
 
 class SystemInfosList(APIView):
@@ -177,7 +176,7 @@ class RefBookDetail(APIView):
 
     def put(self, request, pk):
         ref_book = self.get_object(pk)
-        serializer = serializers.RefBookListSerializer(
+        serializer = serializers.CreateRefBookSerializer(
             ref_book,
             data=request.data,
             partial=True,
@@ -274,10 +273,10 @@ class RefDataDetail(APIView):
                 content_serializer.errors,
                 status=status.HTTP_400_BAD_REQUEST,
             )
-        
+
         ref_data_serializer.save()
         content_serializer.save()
-        
+
         return Response(status=status.HTTP_200_OK)
 
     def delete(self, request, pk):
