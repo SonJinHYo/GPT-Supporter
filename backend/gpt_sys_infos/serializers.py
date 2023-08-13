@@ -1,5 +1,5 @@
 from rest_framework.serializers import ModelSerializer, SerializerMethodField
-from .models import SystemInfo
+from .models import RefBook, SystemInfo
 
 
 class CreateSystemInfoSerializer(ModelSerializer):
@@ -14,7 +14,7 @@ class CreateSystemInfoSerializer(ModelSerializer):
         )
 
 
-class ListSystemInfoSerializer(ModelSerializer):
+class SystemInfoListSerializer(ModelSerializer):
     ref_book_title = SerializerMethodField()
     ref_data_title = SerializerMethodField()
 
@@ -85,3 +85,20 @@ class SystemInfoDetailSerializer(ModelSerializer):
             data_list.append(data)
 
         return data_list
+
+
+class CreateRefBookSerializer(ModelSerializer):
+    model = RefBook
+    fields = (
+        "author",
+        "title",
+    )
+
+
+class RefBookListSerializer(ModelSerializer):
+    model = RefBook
+    fields = (
+        "pk",
+        "author",
+        "title",
+    )
