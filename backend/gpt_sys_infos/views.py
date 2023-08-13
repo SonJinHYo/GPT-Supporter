@@ -50,9 +50,9 @@ class CreateSystemInfo(APIView):
 
 class SystemInfosList(APIView):
     permission_classes = [IsAuthenticated]
-    queryset = SystemInfo.objects.all()
 
     def get(self, request):
+        queryset = SystemInfo.objects.filter(user=request.user)
         pagination = PageNumberPagination()
         paginated_system_infos = pagination.paginate_queryset(
             self.queryset,
@@ -135,7 +135,7 @@ class CreateRefBook(APIView):
     def post(self, request):
         serializer = serializers.CreateRefBookSerializer(data=request.data)
         if serializer.is_valid():
-            serializer.save()
+            serializer.save(user=request.user)
             return Response(status=status.HTTP_201_CREATED)
         else:
             return Response(
@@ -146,9 +146,9 @@ class CreateRefBook(APIView):
 
 class RefBooksList(APIView):
     permission_classes = [IsAuthenticated]
-    queryset = RefBook.objects.all()
 
     def get(self, request):
+        queryset = RefBook.objects.filter(user=request.user)
         pagination = PageNumberPagination()
         paginated_ref_books = pagination.paginate_queryset(
             self.queryset,
@@ -213,7 +213,7 @@ class CreateRefData(APIView):
                 status=status.HTTP_400_BAD_REQUEST,
             )
 
-        new_ref_data = ref_data_serializer.save()
+        new_ref_data = ref_data_serializer.save(user=request.user)
         content_serializer.save(data=new_ref_data)
 
         return Response(status=status.HTTP_201_CREATED)

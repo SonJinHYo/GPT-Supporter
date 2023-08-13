@@ -40,6 +40,12 @@ class SystemInfo(models.Model):
 
 
 class RefBook(models.Model):
+    user = models.ForeignKey(
+        "users.User",
+        on_delete=models.CASCADE,
+        related_name="ref_books",
+    )
+
     system_info = models.ForeignKey(
         "gpt_sys_infos.SystemInfo",
         null=True,
@@ -51,6 +57,12 @@ class RefBook(models.Model):
 
 
 class RefData(models.Model):
+    user = models.ForeignKey(
+        "users.User",
+        on_delete=models.CASCADE,
+        related_name="ref_datas",
+    )
+
     system_info = models.ForeignKey(
         "gpt_sys_infos.SystemInfo",
         null=True,

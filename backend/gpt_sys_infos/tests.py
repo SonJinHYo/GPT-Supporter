@@ -136,6 +136,48 @@ class CreateRefDataTestCase(APITestCase):
         self.assertEqual(RefData.objects.count(), 0)
 
 
+class RefDatasListTestCase(APITestCase):
+    def setUp(self):
+        self.user = User.objects.create_user(
+            username="testuser", password="testpassword"
+        )
+        self.client.force_authenticate(user=self.user)
+
+        self.url = reverse("refdata")  # 해당 URL 생성
+
+        self.page_size = settings.REST_FRAMEWORK["PAGE_SIZE"]
+        self.obj_count = 26
+        self.last_page = self.obj_count // self.page_size + 1
+        self.rem_page = self.obj_count % self.page_size
+
+        # 10개의 RefData 인스턴스 생성
+        for i in range(self.obj_count):
+            self.client.post(
+                reverse("create-refdata"),
+                {
+                    "title": f"Title {i}",
+                    "content": f"Content {i}",
+                },
+            )
+            # RefData.objects.create(title=f"Title {i}", content=f"Content {i}")
+
+    def test_list_ref_datas(self):
+        response = self.client.get(self.url)
+        print(response.data)
+
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+        self.assertEqual(response.data[0]["title"], "Title 0")
+        self.assertEqual(response.data[4]["title"], "Title 4")
+
+    def test_pagination_ref_books(self):
+        for page in range(1, self.last_page + 1):
+            response = self.client.get(f"{self.url}" + f"?page={page}")
+            if page != self.last_page:
+                self.assertEqual(len(response.data), self.page_size)
+            else:
+                self.assertEqual(len(response.data), self.rem_page)
+
+
 # class CreateSysInfoTest(APITestCase):
 #     def setUp(self):
 #         self.user = User.objects.create_user(
