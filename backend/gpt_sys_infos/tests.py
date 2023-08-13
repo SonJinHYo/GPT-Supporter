@@ -82,6 +82,40 @@ class RefBooksListTestCase(APITestCase):
                 self.assertEqual(len(response.data), self.rem_page)
 
 
+class RefBookDetailTestCase(APITestCase):
+    def setUp(self):
+        self.user = User.objects.create_user(
+            username="testuser", password="testpassword"
+        )
+        self.ref_book = RefBook.objects.create(author="Test Author", title="Test Title")
+        self.url = reverse("refbook-detail", kwargs={"pk": self.ref_book.pk})
+
+    def test_get_ref_book(self):
+        self.client.force_authenticate(user=self.user)
+        response = self.client.get(self.url)
+
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+        self.assertEqual(response.data["author"], self.ref_book.author)
+        self.assertEqual(response.data["title"], self.ref_book.title)
+
+    def test_update_ref_book(self):
+        self.client.force_authenticate(user=self.user)
+        updated_data = {"author": "Updated Author", "title": "Updated Title"}
+        response = self.client.put(self.url, updated_data)
+
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+        self.ref_book.refresh_from_db()  # 데이터베이스에서 최신 정보로 업데이트
+        self.assertEqual(self.ref_book.author, updated_data["author"])
+        self.assertEqual(self.ref_book.title, updated_data["title"])
+
+    def test_delete_ref_book(self):
+        self.client.force_authenticate(user=self.user)
+        response = self.client.delete(self.url)
+
+        self.assertEqual(response.status_code, status.HTTP_204_NO_CONTENT)
+        self.assertFalse(RefBook.objects.filter(pk=self.ref_book.pk).exists())
+
+
 # class CreateSysInfoTest(APITestCase):
 #     def setUp(self):
 #         self.user = User.objects.create_user(
