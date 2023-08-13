@@ -151,7 +151,7 @@ class RefBooksList(APIView):
         queryset = RefBook.objects.filter(user=request.user)
         pagination = PageNumberPagination()
         paginated_ref_books = pagination.paginate_queryset(
-            self.queryset,
+            queryset,
             request,
         )
 
@@ -167,6 +167,8 @@ class RefBooksList(APIView):
 
 
 class RefBookDetail(APIView):
+    permission_classes = [IsAuthenticated]
+
     def get_object(self, pk):
         try:
             return RefBook.objects.get(pk=pk)
@@ -221,12 +223,12 @@ class CreateRefData(APIView):
 
 class RefDatasList(APIView):
     permission_classes = [IsAuthenticated]
-    queryset = RefData.objects.all()
 
     def get(self, request):
+        queryset = RefData.objects.filter(user=request.user)
         pagination = PageNumberPagination()
         paginated_ref_datas = pagination.paginate_queryset(
-            self.queryset,
+            queryset,
             request,
         )
 

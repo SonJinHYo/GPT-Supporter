@@ -119,9 +119,9 @@ class RefDataContentSerializer(ModelSerializer):
 
 
 class RefDataListSerializer(ModelSerializer):
-    class Meta:
-        text = SerializerMethodField()
+    text = SerializerMethodField()
 
+    class Meta:
         model = RefData
         fields = (
             "pk",
@@ -129,5 +129,5 @@ class RefDataListSerializer(ModelSerializer):
             "text",
         )
 
-        def get_text(self, ref_data_object):
-            return ref_data_object.content.text
+    def get_text(self, ref_data_object):
+        return ref_data_object.content.text
