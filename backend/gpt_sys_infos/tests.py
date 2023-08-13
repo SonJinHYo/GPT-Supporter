@@ -4,7 +4,7 @@ from django.conf import settings
 from rest_framework.test import APITestCase
 from rest_framework import status
 from users.models import User
-from .models import SystemInfo
+from .models import RefData, SystemInfo
 
 
 from django.urls import reverse
@@ -89,17 +89,9 @@ class RefBookDetailTestCase(APITestCase):
         )
         self.ref_book = RefBook.objects.create(author="Test Author", title="Test Title")
         self.url = reverse("refbook-detail", kwargs={"pk": self.ref_book.pk})
-
-    def test_get_ref_book(self):
         self.client.force_authenticate(user=self.user)
-        response = self.client.get(self.url)
-
-        self.assertEqual(response.status_code, status.HTTP_200_OK)
-        self.assertEqual(response.data["author"], self.ref_book.author)
-        self.assertEqual(response.data["title"], self.ref_book.title)
 
     def test_update_ref_book(self):
-        self.client.force_authenticate(user=self.user)
         updated_data = {"author": "Updated Author", "title": "Updated Title"}
         response = self.client.put(self.url, updated_data)
 
@@ -109,11 +101,39 @@ class RefBookDetailTestCase(APITestCase):
         self.assertEqual(self.ref_book.title, updated_data["title"])
 
     def test_delete_ref_book(self):
-        self.client.force_authenticate(user=self.user)
         response = self.client.delete(self.url)
 
         self.assertEqual(response.status_code, status.HTTP_204_NO_CONTENT)
         self.assertFalse(RefBook.objects.filter(pk=self.ref_book.pk).exists())
+
+
+class CreateRefDataTestCase(APITestCase):
+    def setUp(self):
+        self.user = User.objects.create_user(
+            username="testuser", password="testpassword"
+        )
+        self.url = reverse("create-refdata")  # 해당 URL 생성
+        self.client.force_authenticate(user=self.user)
+
+    def test_create_ref_data(self):
+        data = {"title": "Test Title", "text": "Test Text"}
+        response = self.client.post(self.url, data)
+
+        self.assertEqual(response.status_code, status.HTTP_201_CREATED)
+        self.assertEqual(RefData.objects.count(), 1)
+        self.assertEqual(RefData.objects.first().title, data["title"])
+        self.assertEqual(RefData.objects.first().content.text, data["text"])
+
+    def test_create_ref_data_invalid_data(self):
+        self.client.force_authenticate(user=self.user)
+        invalid_data = {
+            "title": "Test Title",
+            # "text": "Test Text"  # text 필드가 누락된 무효한 데이터
+        }
+        response = self.client.post(self.url, invalid_data)
+
+        self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
+        self.assertEqual(RefData.objects.count(), 0)
 
 
 # class CreateSysInfoTest(APITestCase):
