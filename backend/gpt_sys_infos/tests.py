@@ -162,7 +162,6 @@ class RefDatasListTestCase(APITestCase):
 
     def test_list_ref_datas(self):
         response = self.client.get(self.url)
-        print(response.data)
         self.assertEqual(response.status_code, status.HTTP_200_OK)
 
     def test_pagination_ref_books(self):
@@ -172,6 +171,40 @@ class RefDatasListTestCase(APITestCase):
                 self.assertEqual(len(response.data), self.page_size)
             else:
                 self.assertEqual(len(response.data), self.rem_page)
+
+
+class RefDataDetailTestCase(APITestCase):
+    def setUp(self):
+        self.user = User.objects.create_user(
+            username="testuser", password="testpassword"
+        )
+        self.client.force_authenticate(user=self.user)
+
+        self.client.post(
+            reverse("create-refdata"),
+            {
+                "user": self.user,
+                "title": "Test Title",
+                "text": "Test Text",
+            },
+        )
+        self.ref_data = RefData.objects.get(user=self.user, pk=1)
+        self.url = reverse("refdata-detail", kwargs={"pk": self.ref_data.pk})
+
+    def test_update_ref_data(self):
+        updated_data = {"title": "Updated Title", "text": "Updated Text"}
+        response = self.client.put(self.url, updated_data)
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+
+        self.ref_data.refresh_from_db()  # 데이터베이스에서 최신 정보로 업데이트
+        self.assertEqual(self.ref_data.title, updated_data["title"])
+        self.assertEqual(self.ref_data.content.text, updated_data["text"])
+
+    def test_delete_ref_data(self):
+        response = self.client.delete(self.url)
+
+        self.assertEqual(response.status_code, status.HTTP_204_NO_CONTENT)
+        self.assertFalse(RefData.objects.filter(pk=self.ref_data.pk).exists())
 
 
 # # class CreateSysInfoTest(APITestCase):

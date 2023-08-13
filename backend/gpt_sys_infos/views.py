@@ -244,6 +244,8 @@ class RefDatasList(APIView):
 
 
 class RefDataDetail(APIView):
+    permission_classes = [IsAuthenticated]
+
     def get_object(self, pk):
         try:
             return RefData.objects.get(pk=pk)
@@ -252,19 +254,31 @@ class RefDataDetail(APIView):
 
     def put(self, request, pk):
         ref_data = self.get_object(pk)
-        serializer = serializers.RefDataListSerializer(
+        ref_data_serializer = serializers.RefDataListSerializer(
             ref_data,
             data=request.data,
             partial=True,
         )
-        if serializer.is_valid():
-            serializer.save()
-            return Response(status=status.HTTP_200_OK)
-        else:
+        content_serializer = serializers.RefDataContentSerializer(
+            ref_data.content,
+            data=request.data,
+            partial=True,
+        )
+        if not ref_data_serializer.is_valid():
             return Response(
-                serializer.errors,
+                ref_data_serializer.errors,
                 status=status.HTTP_400_BAD_REQUEST,
             )
+        if not content_serializer.is_valid():
+            return Response(
+                content_serializer.errors,
+                status=status.HTTP_400_BAD_REQUEST,
+            )
+        
+        ref_data_serializer.save()
+        content_serializer.save()
+        
+        return Response(status=status.HTTP_200_OK)
 
     def delete(self, request, pk):
         ref_data = self.get_object(pk)
