@@ -88,41 +88,46 @@ class SystemInfoDetailSerializer(ModelSerializer):
 
 
 class CreateRefBookSerializer(ModelSerializer):
-    model = RefBook
-    fields = (
-        "author",
-        "title",
-    )
+    class Meta:
+        model = RefBook
+        fields = (
+            "author",
+            "title",
+        )
 
 
 class RefBookListSerializer(ModelSerializer):
-    model = RefBook
-    fields = (
-        "pk",
-        "author",
-        "title",
-    )
+    class Meta:
+        model = RefBook
+        fields = (
+            "pk",
+            "author",
+            "title",
+        )
 
 
 class CreateRefDataSerializer(ModelSerializer):
-    model = RefData
-    fields = ("title",)
+    class Meta:
+        model = RefData
+        fields = ("title",)
 
 
 class RefDataContentSerializer(ModelSerializer):
-    model = Content
-    fields = ("text",)
+    class Meta:
+        model = Content
+        fields = ("text",)
 
 
 class RefDataListSerializer(ModelSerializer):
-    text = SerializerMethodField()
+    class Meta:
+        text = SerializerMethodField()
 
-    model = RefData
-    fields = (
-        "pk",
-        "title",
-        "text",
-    )
+        model = RefData
+        fields = (
+            "pk",
+            "title",
+            "text",
+        )
 
-    def get_text(self, ref_data_object):
-        return ref_data_object.content.text
+        def get_text(self, ref_data_object):
+            return ref_data_object.content.text

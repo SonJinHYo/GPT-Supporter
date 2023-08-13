@@ -135,6 +135,7 @@ class CreateRefBook(APIView):
     def post(self, request):
         serializer = serializers.CreateRefBookSerializer(data=request.data)
         if serializer.is_valid():
+            serializer.save()
             return Response(status=status.HTTP_201_CREATED)
         else:
             return Response(
