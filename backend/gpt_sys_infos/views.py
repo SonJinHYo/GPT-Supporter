@@ -54,7 +54,7 @@ class SystemInfosList(APIView):
         queryset = SystemInfo.objects.filter(user=request.user)
         pagination = PageNumberPagination()
         paginated_system_infos = pagination.paginate_queryset(
-            self.queryset,
+            queryset,
             request,
         )
 
