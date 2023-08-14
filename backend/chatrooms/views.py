@@ -10,7 +10,7 @@ from rest_framework import exceptions
 from rest_framework.response import Response
 from rest_framework.permissions import IsAuthenticated
 
-from .models import ChatRoom
+from .models import ChatRoom, Message
 from users.models import User
 
 
@@ -46,11 +46,29 @@ class ChatRoomsList(APIView):
     permission_classes = [IsAuthenticated]
 
     def get(self, request):
-        chatrooms = ChatRoom.objects.all()
-        serializer = serializers.CreateChatRoomSerializer(
+        chatrooms = ChatRoom.objects.filter(user=request.user).order_by("-updated_at")
+        serializer = serializers.ChatRoomsListSerializer(
             chatrooms,
             many=True,
         )
+        if serializer.is_valid():
+            return Response(serializer.data, status=status.HTTP_200_OK)
+        else:
+            return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+
+class ChatRoomsDetail(APIView):
+    permission_classes = [IsAuthenticated]
+
+    def get_object(self, pk):
+        try:
+            return ChatRoom.objects.get(pk=pk)
+        except:
+            raise exceptions.NotFound("채팅방 데이터를 찾을 수 없습니다.")
+
+    def get(self, request, pk):
+        chatroom = self.get_object(pk)
+        serializer = serializers.ChatRoomDetailSerializer(chatroom)
         if serializer.is_valid():
             return Response(serializer.data, status=status.HTTP_200_OK)
         else:
