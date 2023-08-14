@@ -15,6 +15,7 @@ from users.models import User
 
 
 from . import serializers
+from .chatapi import post_chat_api
 
 import json
 
@@ -54,3 +55,51 @@ class ChatRoomsList(APIView):
             return Response(serializer.data, status=status.HTTP_200_OK)
         else:
             return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+
+class SendMessage(APIView):
+    permission_classes = [IsAuthenticated]
+
+    def post(self, request, pk):  # pk : chatroom의 pk
+        text = request.data.get("text")
+        chatroom = ChatRoom.objects.get(pk=pk)
+        serializer = serializers.SendMessageSerializer(data={"text": text})
+
+        if not serializer.is_valid():
+            return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+        serializer.save(
+            sender=request.user.username,
+            chatroom=chatroom,
+        )
+
+        # try:
+        #     chat_api_response = post_chat_api(text)
+        # except:
+        #     return Response(
+        #         {"message": "ChatGPT에게 요청이 실패했습니다."},
+        #         status=status.HTTP_500_INTERNAL_SERVER_ERROR,
+        #     )
+        # chat_api_message = chat_api_response["message"]
+
+        ################################################################
+        #########            테스트용 데이터                  ###########
+        ################################################################
+        chat_api_message = "테스트 메세지"  ###########
+        ################################################################
+
+        chat_api_seralizer = serializers.SendMessageSerializer(
+            data={"text": chat_api_message}
+        )
+
+        if chat_api_seralizer.is_valid():
+            return Response(
+                {"message": "올바른 답변을 받지 못했습니다."}, status=status.HTTP_400_BAD_REQUEST
+            )
+
+        chat_api_seralizer.save(
+            sender="gpt",
+            chatroom=chatroom,
+        )
+
+        return Response({"message": chat_api_message}, status=status.HTTP_200_OK)

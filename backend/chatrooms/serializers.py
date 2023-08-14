@@ -1,5 +1,5 @@
 from rest_framework.serializers import ModelSerializer, SerializerMethodField
-from .models import ChatRoom
+from .models import ChatRoom, Message
 
 
 class CreateChatRoomSerializer(ModelSerializer):
@@ -9,3 +9,9 @@ class CreateChatRoomSerializer(ModelSerializer):
             "name",
             "category",
         )
+
+
+class SendMessageSerializer(ModelSerializer):
+    class Meta:
+        model = Message
+        fields = ("text",)
