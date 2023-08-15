@@ -1,3 +1,5 @@
+from channels.generic.websocket import JsonWebsocketConsumer
+
 from django.contrib.auth import authenticate
 from django.db import transaction
 from django.conf import settings
@@ -57,7 +59,7 @@ class ChatRoomsList(APIView):
             return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
 
-class ChatRoomsDetail(APIView):
+class ChatRoomsDetail(JsonWebsocketConsumer):
     permission_classes = [IsAuthenticated]
 
     def get_object(self, pk):
