@@ -27,7 +27,7 @@ class UserSerializer(ModelSerializer):
 
 
 class UserPrivateSerializer(ModelSerializer):
-    chat_room_title_list = SerializerMethodField()
+    chat_room_name_list = SerializerMethodField()
     sys_info_description_list = SerializerMethodField()
 
     class Meta:
@@ -36,14 +36,14 @@ class UserPrivateSerializer(ModelSerializer):
             "username",
             "email",
             "using_token",
-            "chat_room_title_list",
+            "chat_room_name_list",
             "sys_info_description_list",
             "created_at",
             "updated_at",
         )
 
-    def get_chat_room_title_list(self, user_obj):
-        return [chatroom.title for chatroom in user_obj.chatrooms.all()]
+    def get_chat_room_name_list(self, user_obj):
+        return [chatroom.name for chatroom in user_obj.chatrooms.all()]
 
     def get_sys_info_description_list(self, user_obj):
         return [system_info.description for system_info in user_obj.system_infos.all()]

@@ -58,6 +58,7 @@ class SystemInfoDetailSerializer(ModelSerializer):
             "major",
             "understanding_level",
             "only_use_reference_data",
+            "data_sequence",
             "ref_books",
             "ref_datas",
         )

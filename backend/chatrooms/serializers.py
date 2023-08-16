@@ -12,13 +12,19 @@ class CreateChatRoomSerializer(ModelSerializer):
 
 
 class ChatRoomsListSerializer(ModelSerializer):
+    system_info_description = SerializerMethodField()
+
     class Meta:
         model = ChatRoom
         fields = (
             "pk",
             "name",
             "category",
+            "system_info_description",
         )
+
+    def get_system_info_description(self, chatroom_obj):
+        return chatroom_obj.system_info.description
 
 
 class ChatRoomDetailSerializer(ModelSerializer):

@@ -18,7 +18,7 @@ class ChatRoom(models.Model):
         choices=CATEGORYS,
         default="general",
     )
-    system_info = models.OneToOneField(
+    system_info = models.ForeignKey(
         "gpt_sys_infos.SystemInfo",
         on_delete=models.CASCADE,
         related_name="system_info",
