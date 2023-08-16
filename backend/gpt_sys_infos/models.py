@@ -35,6 +35,7 @@ class SystemInfo(models.Model):
         ]
     )
     only_use_reference_data = models.BooleanField(default=False)
+    data_sequence = models.BooleanField(default=False)
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
 

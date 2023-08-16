@@ -12,11 +12,16 @@ class ChatRoom(models.Model):
         on_delete=models.CASCADE,
         related_name="chatrooms",
     )
-    name = models.CharField(max_length=20)
+    name = models.CharField(max_length=50)
     category = models.CharField(
         max_length=20,
         choices=CATEGORYS,
         default="general",
+    )
+    system_info = models.OneToOneField(
+        "gpt_sys_infos.SystemInfo",
+        on_delete=models.CASCADE,
+        related_name="system_info",
     )
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
