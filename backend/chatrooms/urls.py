@@ -7,5 +7,5 @@ urlpatterns = [
 ]
 
 websocket_patterms = [
-    path("ws/chatroom/<int:pk>", views.ChatRoomsDetail.as_asgi()),
+    path("api/v1/chatrooms/<int:chatroom_pk>", views.ChatRoomsDetail.as_asgi()),
 ]

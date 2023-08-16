@@ -21,12 +21,14 @@ class SystemInfoListSerializer(ModelSerializer):
     class Meta:
         model = SystemInfo
         fields = (
+            "pk",
             "description",
             "user",
             "language",
             "major",
             "understanding_level",
             "only_use_reference_data",
+            "data_sequence",
             "ref_book_title",
             "ref_data_title",
         )
@@ -49,6 +51,7 @@ class SystemInfoDetailSerializer(ModelSerializer):
     class Meta:
         model = SystemInfo
         fields = (
+            "pk",
             "description",
             "user",
             "language",

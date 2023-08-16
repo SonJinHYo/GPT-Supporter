@@ -22,6 +22,7 @@ class ChatRoom(models.Model):
         "gpt_sys_infos.SystemInfo",
         on_delete=models.CASCADE,
         related_name="system_info",
+        null=True,
     )
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
