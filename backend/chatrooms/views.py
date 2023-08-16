@@ -1,4 +1,5 @@
 import os
+import time
 from channels.generic.websocket import JsonWebsocketConsumer
 
 from django.contrib.auth import authenticate
@@ -72,25 +73,66 @@ class ChatRoomsDetail(JsonWebsocketConsumer):
         self.count = 0
         self.set_messages = []
         self.stream_messages = []
+        self.user = None
+        self.chatroom = None
 
     def connect(self):
-        chatroom = self.get_chatroom()
-        system_info = chatroom.system_info
-        serializer = serializers.SystemInfoDetailSerializer(system_info)
-
-        if chatroom is None:
+        if self.chatroom is None:
             self.close()
         else:
+            self.chatroom = self.get_chatroom()
+            system_info = self.chatroom.system_info
+            serializer = serializers.SystemInfoDetailSerializer(system_info)
+
+            self.set_pre_messages(
+                system_info=serializer, category=self.chatroom.category
+            )
+
+            if self.chatroom.messages.objects.exists():
+                message_serializer = serializers.MessageSerializer(
+                    self.chatroom.messages.objects.all(),
+                    many=True,
+                )
+
+                self.stream_messages = message_serializer.data
+
             self.accept()
+
+    def disconnect(self, code):
+        for message in self.stream_messages:
+            Message.objects.create(
+                chatroom=self.chatroom,
+                role=message["role"],
+                content=message["content"],
+            )
+        return super().disconnect(code)
 
     def receive_json(self, content, **kwargs):
         self.count += 1
+        user_message = content["message"]
+        self.stream_messages.append({"role": "user", "content": user_message})
+
+        try:
+            completion = openai.ChatCompletion.create(
+                model="gpt-3.5-turbo",
+                messages=self.set_pre_messages + self.stream_messages,
+            )
+        except:
+            raise exceptions.server_error("openai api 통신 실패")
+
+        self.user.using_token += completion.usage["total_tokens"]
+        response_content = completion.choices[0].message["content"]
+        self.stream_messages.append({"role": "assistant", "content": response_content})
+
+        self.send_json({"message": response_content})
+
         content["count"] = self.count
+
         self.send_json(content)
 
     def get_chatroom(self):
         print(self.scope)
-        user = ws_authenticate(self.scope)
+        self.user = ws_authenticate(self.scope)
         chatroom_pk = self.scope["url_route"]["kwargs"]["chatroom_pk"]
         print("chatroom_pk:", chatroom_pk)
         try:
