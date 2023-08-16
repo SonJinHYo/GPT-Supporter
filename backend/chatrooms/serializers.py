@@ -27,6 +27,7 @@ class ChatRoomDetailSerializer(ModelSerializer):
     class Meta:
         model = ChatRoom
         fields = ("name", "category", "messages")
+        ordering = ["updateed_at"]
 
     def get_messages(self, chatroom_obj):
         return [
@@ -35,7 +36,11 @@ class ChatRoomDetailSerializer(ModelSerializer):
         ]
 
 
-class SendMessageSerializer(ModelSerializer):
+class MessageSerializer(ModelSerializer):
     class Meta:
         model = Message
-        fields = ("text",)
+        fields = (
+            "role",
+            "content",
+        )
+        ordering = ["created_at"]

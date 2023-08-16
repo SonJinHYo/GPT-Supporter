@@ -1,8 +1,10 @@
+import os
 from channels.generic.websocket import JsonWebsocketConsumer
 
 from django.contrib.auth import authenticate
 from django.db import transaction
 from django.conf import settings
+import openai
 
 from rest_framework.views import APIView
 
@@ -18,7 +20,8 @@ from .models import ChatRoom, Message
 from users.models import User
 from . import serializers
 from config.authentication import ws_authenticate
-from .chatapi import post_chat_api
+from gpt_sys_infos.serializers import SystemInfoDetailSerializer
+from .chatapi import ChatGPT
 
 import json
 
@@ -67,9 +70,13 @@ class ChatRoomsDetail(JsonWebsocketConsumer):
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
         self.count = 0
+        self.set_messages = []
+        self.stream_messages = []
 
     def connect(self):
         chatroom = self.get_chatroom()
+        system_info = chatroom.system_info
+        serializer = serializers.SystemInfoDetailSerializer(system_info)
 
         if chatroom is None:
             self.close()
@@ -91,6 +98,89 @@ class ChatRoomsDetail(JsonWebsocketConsumer):
         except ChatRoom.DoesNotExist:
             print(222)
             return None
+
+    def set_pre_messages(self, system_info, category):
+        language = "Korean" if system_info["language"] == "ko" else "English"
+        major = system_info["major"]
+        understanding_level = system_info["understanding_level"]
+        only_use_reference_data = system_info["only_use_reference_data"]
+        ref_books = system_info["ref_books"]
+        ref_datas = system_info["ref_datas"]
+        data_sequence = system_info["data_sequence"]
+        openai.api_key = os.environ.get("OPENAI_KEY")
+
+        ########     System role Set     ########
+        system_role_content = f"You are asked questions about {major}. \
+            I want you to answer according to the level of the {understanding_level} year of college.\
+                And respond in {language}, whether the user is using English or Korean."
+
+        self.set_messages.append(
+            {
+                "role": "system",
+                "content": system_role_content,
+            },
+        )
+
+        ########     User role Set     ########
+
+        if ref_books:
+            ref_books_string = ""
+            for author, title in ref_books:
+                ref_books_string += f"'{author} - {title}', "
+
+            user_role_book_content += f"I will now provide you with the titles and authors of the books the user is using. \
+                I will state them in the format of 'Author - Title'. \n\
+                    {ref_books_string[:-2]}.\
+                     Please keep this information in mind when responding.\n\n"
+
+            self.set_messages.append(
+                {
+                    "role": "user",
+                    "content": user_role_book_content,
+                },
+            )
+
+        if ref_datas:
+            user_role_data_content += 'I have reference materials. Each piece of material is enclosed within three double quotation marks in the following format: \
+                """title: , content: """. Please keep this format in mind when responding.'
+            if data_sequence:
+                user_role_data_content += " Also, the data I provide to you will have an order following the sequence I inform you of."
+
+            if only_use_reference_data:
+                user_role_data_content += " Please prioritize responses based on the reference materials I've sent for now."
+
+                self.set_messages.append(
+                    {
+                        "role": "user",
+                        "content": user_role_data_content,
+                    }
+                )
+
+            for i, ref_data in enumerate(ref_datas, start=1):
+                self.set_messages.append(
+                    {
+                        "role": "user",
+                        "content": f'material {i}. """title: {ref_data["title"]}, content: {ref_data["text"]}"""',
+                    }
+                )
+        if category == "eqution":
+            self.set_messages.append(
+                {
+                    "role": "user",
+                    "content": "you will receive math equations with Korean mixed in. \
+            When asking for a math equation, I will enclose it with three backticks. \
+            Then, show the corresponding equation in expressed as LaTeX code.You should send the LaTeX code enclosed in a Math Block format. \
+            If there are any typos in the interpreted equation or mathematically incorrect expressions, \
+            please let me know it's incorrect and provide the reasons.",
+                }
+            )
+
+        self.set_messages.append(
+            {
+                "role": "user",
+                "content": "I've provided all the information. I will now begin asking questions.",
+            }
+        )
 
     # permission_classes = [IsAuthenticated]
 

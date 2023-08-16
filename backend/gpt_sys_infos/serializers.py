@@ -81,9 +81,6 @@ class SystemInfoDetailSerializer(ModelSerializer):
 
         for data in datas:
             text = data.content.text
-            if len(text) > 200:
-                text = text[:200] + "..."
-
             data = {"title": data.title, "text": text}
             data_list.append(data)
 

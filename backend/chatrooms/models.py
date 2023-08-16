@@ -34,6 +34,6 @@ class Message(models.Model):
         on_delete=models.CASCADE,
         related_name="messages",
     )
-    sender = models.CharField(max_length=20)
-    text = models.TextField()
+    role = models.CharField(max_length=20)
+    content = models.TextField()
     created_at = models.DateTimeField(auto_now_add=True)
