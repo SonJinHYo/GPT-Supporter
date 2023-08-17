@@ -112,12 +112,19 @@ class ChatRoomsDetail(JsonWebsocketConsumer):
         return super().disconnect(code)
 
     def receive_json(self, content, **kwargs):
+        if "rm_message" in content:  # 삭제(해당 메세지 수정) 키워드가 들어오면
+            reset_messages_index = int(content["rm_message"])  # 해당 키워드에서 메세지의 인덱스를 파악하고
+            if 0 <= reset_messages_index < len(self.stream_messages):  # 유효한 인덱스라면
+                self.stream_messages = (  # 해당 메세지'까지' 삭제. 이후 해당 메세지 부분을 전송받은대로 재장
+                    self.stream_messages[: reset_messages_index + 1]
+                )
+
         user_message = content["message"]
         self.stream_messages.append({"role": "user", "content": user_message})
         pprint.pprint(self.set_messages + self.stream_messages)
         try:
             completion = openai.ChatCompletion.create(
-                model="gpt-3.5-turbo-0613",
+                model="gpt-3.5-turbo",
                 messages=self.set_messages + self.stream_messages,
             )
         except:
@@ -126,27 +133,11 @@ class ChatRoomsDetail(JsonWebsocketConsumer):
         self.user.using_token += completion["usage"]["total_tokens"]
         self.user.save()
         print(completion)
-        print(type(completion))
-        print(completion["usage"]["prompt_tokens"])
-        print(completion["usage"]["completion_tokens"])
         response_content = completion["choices"][0]["message"]["content"]
-
-        # response_content = (
-        #     response_content
-        #     .encode("unicode-escape")
-        #     .decode("utf-8")
-        # )
-        # response_content = bytes(response_content, "utf-8").decode("unicode_escape")
         print(response_content)
-        print(type(response_content))
         self.stream_messages.append({"role": "assistant", "content": response_content})
 
         self.send_json({"message": response_content})
-
-    def return_print(self, *prt_str):
-        io = StringIO()
-        print(*prt_str, file=io, end="")
-        return io.getvalue()
 
     def get_chatroom(self):
         self.user, _ = ws_authenticate(self.scope)
@@ -237,22 +228,6 @@ class ChatRoomsDetail(JsonWebsocketConsumer):
                 "content": "I've provided all the information. I will now begin asking questions. Please keep information in mind when responding.",
             }
         )
-
-    # permission_classes = [IsAuthenticated]
-
-    # def get_object(self, pk):
-    #     try:
-    #         return ChatRoom.objects.get(pk=pk)
-    #     except:
-    #         raise exceptions.NotFound("채팅방 데이터를 찾을 수 없습니다.")
-
-    # def get(self, request, pk):
-    #     chatroom = self.get_object(pk)
-    #     serializer = serializers.ChatRoomDetailSerializer(chatroom)
-    #     if serializer.is_valid():
-    #         return Response(serializer.data, status=status.HTTP_200_OK)
-    #     else:
-    #         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
 
 class SendMessage(APIView):
