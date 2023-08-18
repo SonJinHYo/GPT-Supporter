@@ -1,3 +1,9 @@
+import { Box, Text } from "@chakra-ui/react";
+
 export default function Home() {
-  return <span>homeeee</span>;
+  return (
+    <Box>
+      <Text>Home!</Text>
+    </Box>
+  );
 }
