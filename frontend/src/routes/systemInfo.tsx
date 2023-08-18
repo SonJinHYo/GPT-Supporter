@@ -1,4 +1,4 @@
-import { AddIcon, QuestionIcon } from "@chakra-ui/icons";
+import { AddIcon, QuestionIcon, SmallCloseIcon } from "@chakra-ui/icons";
 import {
   Box,
   Button,
@@ -15,10 +15,11 @@ import {
   useDisclosure,
   VStack,
 } from "@chakra-ui/react";
+import { useState } from "react";
 import { Link } from "react-router-dom";
 import SystemInfoModal from "../components/SystemInfoModal";
 
-interface SystemInfoData {
+interface ISystemInfoData {
   pk: number;
   description: string;
   user: number;
@@ -32,13 +33,13 @@ interface SystemInfoData {
 }
 
 export default function SystemInfo() {
-  const testData: SystemInfoData[] = [
+  const testData: ISystemInfoData[] = [
     {
       pk: 1,
-      description: "시스템 설정 설명 수정",
+      description: "36.5도 물리학 자료",
       user: 1,
       language: "ko",
-      major: "물리학과",
+      major: "Physics",
       understanding_level: 2,
       only_use_reference_data: false,
       data_sequence: false,
@@ -47,11 +48,11 @@ export default function SystemInfo() {
     },
     {
       pk: 2,
-      description: "시스템 설정 설명 수정",
+      description: "연애의첫단추 중간고사 자료",
       user: 1,
       language: "ko",
-      major: "물리학과",
-      understanding_level: 4,
+      major: "Psychology",
+      understanding_level: 1,
       only_use_reference_data: false,
       data_sequence: true,
       ref_book_title: "책 제목",
@@ -60,17 +61,25 @@ export default function SystemInfo() {
     },
     {
       pk: 1,
-      description: "시스템 설정 설명 수정",
+      description: "미시경제 자료 설정",
       user: 1,
       language: "ko",
-      major: "물리학과",
-      understanding_level: 2,
+      major: "Economics",
+      understanding_level: 4,
       only_use_reference_data: false,
       data_sequence: false,
       ref_book_title: "책 제목, 책 제목 2",
       ref_data_title: "",
     },
   ];
+
+  const [systemInfos, setSystemInfos] = useState<ISystemInfoData[]>(testData);
+
+  const removeSystemInfo = (pk: number) => {
+    const updateData = systemInfos.filter((data) => data.pk !== pk);
+    setSystemInfos(updateData);
+  };
+
   const description: string =
     "ChatGPT 채팅을 시작하기 전에 ChatGPT에게 전달할 정보입니다. \
     시작된 채팅은 제공된 System Information을 기본값으로 시작됩니다. ";
@@ -97,10 +106,19 @@ export default function SystemInfo() {
           size="lg"
           onClick={onOpen}
         />
-        {testData?.map((data) => (
+        {systemInfos?.map((data) => (
           <Card key={data.pk}>
             <CardHeader>
-              <Heading size="md"> {data.description}</Heading>
+              <HStack justifyContent="space-between">
+                <Heading size="md"> {data.description}</Heading>
+                <IconButton
+                  aria-label="card-header"
+                  icon={<SmallCloseIcon />}
+                  size="s"
+                  color="red.400"
+                  onClick={() => removeSystemInfo(data.pk)}
+                />
+              </HStack>
             </CardHeader>
             <CardBody overflow="auto">
               <Text>

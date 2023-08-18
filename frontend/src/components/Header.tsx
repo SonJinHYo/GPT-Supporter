@@ -1,4 +1,4 @@
-import { FaAirbnb, FaBook, FaFileAlt } from "react-icons/fa";
+import { FaHome, FaBook, FaFileAlt } from "react-icons/fa";
 import { RiOpenaiFill } from "react-icons/ri";
 import { BsChatLeft } from "react-icons/bs";
 import {
@@ -31,9 +31,9 @@ export default function Header() {
       px={10}
       borderBottomWidth={1}
     >
-      <Box color="red.500">
+      <Box color="whiteAlpha.900">
         <Link to={"/"}>
-          <FaAirbnb size={"48"} />
+          <FaHome size={"48"} />
         </Link>
       </Box>
       <HStack spacing="8">
@@ -67,14 +67,16 @@ export default function Header() {
             />
           </Tooltip>
         </Link>
-        <Tooltip label="채팅방">
-          <IconButton
-            aria-label={"Ref-Books"}
-            icon={<BsChatLeft size="24" />}
-            variant="ghost"
-            alignSelf="flex-end"
-          />
-        </Tooltip>
+        <Link to={"chatrooms"}>
+          <Tooltip label="채팅방">
+            <IconButton
+              aria-label={"Ref-Books"}
+              icon={<BsChatLeft size="24" />}
+              variant="ghost"
+              alignSelf="flex-end"
+            />
+          </Tooltip>
+        </Link>
       </HStack>
       <HStack spacing={2}>
         {/* <IconButton

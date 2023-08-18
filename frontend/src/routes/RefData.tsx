@@ -1,4 +1,4 @@
-import { AddIcon, QuestionIcon } from "@chakra-ui/icons";
+import { AddIcon, QuestionIcon, SmallCloseIcon } from "@chakra-ui/icons";
 import {
   Box,
   Button,
@@ -15,6 +15,7 @@ import {
   useDisclosure,
   VStack,
 } from "@chakra-ui/react";
+import { useState } from "react";
 import { Link } from "react-router-dom";
 import RefDataModal from "../components/RefDataModal";
 
@@ -42,6 +43,13 @@ export default function RefDatas() {
       text: "본문",
     },
   ];
+
+  const [data, setData] = useState<IRefDataData[]>(testData);
+
+  const removeData = (pk: number) => {
+    const updateData = data.filter((d) => d.pk !== pk);
+    setData(updateData);
+  };
   const description: string =
     "ChatGPT에게 알려줄 자료 정보입니다. \
     저장된 자료는 GPT설정 페이지에서 선택하여 추가합니다.";
@@ -68,11 +76,20 @@ export default function RefDatas() {
           size="lg"
           onClick={onOpen}
         />
-        {testData?.map((data) => (
-          <Card key={data.pk}>
+        {data?.map((d) => (
+          <Card key={d.pk}>
             <CardHeader>
-              <Heading size="md"> {data.title}</Heading>
-              <Text>{data.text}</Text>
+              <HStack justifyContent="space-between">
+                <Heading size="md"> {d.title}</Heading>
+                <IconButton
+                  aria-label="card-header"
+                  icon={<SmallCloseIcon />}
+                  size="s"
+                  color="red.400"
+                  onClick={() => removeData(d.pk)}
+                />
+              </HStack>
+              <Text>{d.text}</Text>
             </CardHeader>
             {/* <CardFooter>
               <Button onClick={() => handleOpenModal(audio)}> View Here</Button>
