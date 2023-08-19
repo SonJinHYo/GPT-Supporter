@@ -18,10 +18,14 @@ import {
   Text,
   Tooltip,
   useDisclosure,
+  useToast,
   VStack,
 } from "@chakra-ui/react";
+import { useMutation, useQuery } from "@tanstack/react-query";
 import { useState } from "react";
 import { Link } from "react-router-dom";
+import { deleteRefBook, getRefBooks } from "../api";
+import Loading from "../components/Loading";
 import RefBookModal from "../components/RefbookModal";
 
 interface IRefBookData {
@@ -48,17 +52,36 @@ export default function RefBooks() {
       title: "책 제목3",
     },
   ];
+  // const [deleteBookPk, setDeleteBookPk] = useState<number>(-1);
   const [books, setBooks] = useState<IRefBookData[]>(testBooks);
+  const { isLoading, data } = useQuery<IRefBookData[]>(
+    ["ref-books"],
+    getRefBooks
+  );
+  if (!isLoading && data && books !== data) {
+    setBooks(data);
+  }
 
-  const removeBook = (pk: number) => {
-    const updateBooks = books.filter((book) => book.pk !== pk);
-    setBooks(updateBooks);
+  const mutation = useMutation(deleteRefBook, {
+    onSuccess: (data) => {
+      window.location.reload();
+    },
+  });
+  const handleRemoveBook = (pk: number) => {
+    mutation.mutate(pk); // deleteRefBook 요청 실행
   };
+
+  // const removeBook = (pk: number) => {
+  //   const updateBooks = books.filter((book) => book.pk !== pk);
+  //   setBooks(updateBooks);
+  // };
 
   const description: string =
     "ChatGPT에게 사용하고 있는 책 정보를 알려줍니다. 저장된 책은 GPT설정 페이지에서 선택하여 추가합니다.";
   const { isOpen: isOpen, onClose: onClose, onOpen: onOpen } = useDisclosure();
-  return (
+  return isLoading ? (
+    <Loading />
+  ) : (
     <VStack align="flex-start" p="20">
       <HStack spacing="6">
         <Heading>Reference Books</Heading>
@@ -90,7 +113,10 @@ export default function RefBooks() {
                   icon={<SmallCloseIcon />}
                   size="s"
                   color="red.400"
-                  onClick={() => removeBook(book.pk)}
+                  onClick={() => {
+                    // removeBook(book.pk);
+                    handleRemoveBook(book.pk);
+                  }}
                 />
               </HStack>
               <Text>{book.author}</Text>

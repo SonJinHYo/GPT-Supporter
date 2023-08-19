@@ -28,15 +28,16 @@ interface IForm {
   password: string;
 }
 export default function LoginModal({ isOpen, onClose }: LoginModalProps) {
+  const queryClient = useQueryClient();
+
   const {
     register,
     handleSubmit,
     formState: { errors },
     reset,
   } = useForm<IForm>();
-  const toast = useToast();
 
-  const queryClient = useQueryClient();
+  const toast = useToast();
   const mutation = useMutation(signIn, {
     onSuccess: () => {
       toast({

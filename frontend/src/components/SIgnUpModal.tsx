@@ -118,7 +118,7 @@ export default function SignUpModal({ isOpen, onClose }: SignUpModalProps) {
             isLoading={mutation.isLoading}
             type="submit"
           >
-            Log in
+            Sign Up
           </Button>
         </ModalBody>
       </ModalContent>
