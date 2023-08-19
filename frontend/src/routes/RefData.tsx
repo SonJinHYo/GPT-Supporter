@@ -15,8 +15,11 @@ import {
   useDisclosure,
   VStack,
 } from "@chakra-ui/react";
+import { useMutation, useQuery } from "@tanstack/react-query";
 import { useState } from "react";
 import { Link } from "react-router-dom";
+import { deleteRefData, getRefData } from "../api";
+import Loading from "../components/Loading";
 import RefDataModal from "../components/RefDataModal";
 
 interface IRefDataData {
@@ -44,17 +47,35 @@ export default function RefDatas() {
     },
   ];
 
-  const [data, setData] = useState<IRefDataData[]>(testData);
+  const [dataList, setDataList] = useState<IRefDataData[]>(testData);
+  const { isLoading, data } = useQuery<IRefDataData[]>(
+    ["ref-data"],
+    getRefData
+  );
+  if (!isLoading && data && data !== dataList) {
+    setDataList(data);
+  }
 
-  const removeData = (pk: number) => {
-    const updateData = data.filter((d) => d.pk !== pk);
-    setData(updateData);
+  const mutation = useMutation(deleteRefData, {
+    onSuccess: (dataList) => {
+      window.location.reload();
+    },
+  });
+  const handleRemoveData = (pk: number) => {
+    mutation.mutate(pk); // deleteRefData 요청 실행
   };
+
+  // const removeData = (pk: number) => {
+  //   const updateData = data.filter((d) => d.pk !== pk);
+  //   setData(updateData);
+  // };
   const description: string =
     "ChatGPT에게 알려줄 자료 정보입니다. \
     저장된 자료는 GPT설정 페이지에서 선택하여 추가합니다.";
   const { isOpen: isOpen, onClose: onClose, onOpen: onOpen } = useDisclosure();
-  return (
+  return isLoading ? (
+    <Loading />
+  ) : (
     <VStack align="flex-start" p="20">
       <HStack spacing="6">
         <Heading>Reference Data</Heading>
@@ -76,7 +97,7 @@ export default function RefDatas() {
           size="lg"
           onClick={onOpen}
         />
-        {data?.map((d) => (
+        {dataList?.map((d) => (
           <Card key={d.pk}>
             <CardHeader>
               <HStack justifyContent="space-between">
@@ -86,7 +107,9 @@ export default function RefDatas() {
                   icon={<SmallCloseIcon />}
                   size="s"
                   color="red.400"
-                  onClick={() => removeData(d.pk)}
+                  onClick={() => {
+                    handleRemoveData(d.pk);
+                  }}
                 />
               </HStack>
               <Text>{d.text}</Text>

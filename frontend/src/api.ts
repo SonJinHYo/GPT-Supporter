@@ -15,6 +15,11 @@ interface ICreateRefBookVariables {
   title: string;
 }
 
+interface ICreateRefDataVariables {
+  title: string;
+  text: string;
+}
+
 const instance = axios.create({
   baseURL: "http://127.0.0.1:8000/api/v1/",
   withCredentials: true,
@@ -85,6 +90,56 @@ export const createRefBook = ({ author, title }: ICreateRefBookVariables) =>
 export const deleteRefBook = (refBookPk: number) =>
   instance
     .delete(`gpt-sys-infos/refbook/${refBookPk}`, {
+      headers: {
+        "X-CSRFToken": Cookie.get("csrftoken") || "",
+      },
+    })
+    .then((response) => response.status);
+
+export const getRefData = () =>
+  instance.get(`gpt-sys-infos/refdata`).then((response) => response.data);
+
+export const createRefData = ({ title, text }: ICreateRefDataVariables) =>
+  instance
+    .post(
+      `gpt-sys-infos/refdata/create`,
+      { title, text },
+      {
+        headers: {
+          "X-CSRFToken": Cookie.get("csrftoken") || "",
+        },
+      }
+    )
+    .then((response) => response.data);
+
+export const deleteRefData = (refDataPk: number) =>
+  instance
+    .delete(`gpt-sys-infos/refdata/${refDataPk}`, {
+      headers: {
+        "X-CSRFToken": Cookie.get("csrftoken") || "",
+      },
+    })
+    .then((response) => response.status);
+
+export const getSystemInfo = () =>
+  instance.get(`gpt-sys-infos/`).then((response) => response.data);
+
+export const createSystemInfo = ({ title, text }: ICreateRefDataVariables) =>
+  instance
+    .post(
+      `gpt-sys-infos/create`,
+      { title, text },
+      {
+        headers: {
+          "X-CSRFToken": Cookie.get("csrftoken") || "",
+        },
+      }
+    )
+    .then((response) => response.data);
+
+export const deleteSystemInfo = (refDataPk: number) =>
+  instance
+    .delete(`gpt-sys-infos/${refDataPk}`, {
       headers: {
         "X-CSRFToken": Cookie.get("csrftoken") || "",
       },
