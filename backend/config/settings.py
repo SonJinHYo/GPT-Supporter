@@ -51,6 +51,7 @@ CUSTOM_APPS = [
 
 THRID_PARTY_APPS = [
     "rest_framework",
+    "corsheaders",
 ]
 
 INSTALLED_APPS = SYSTEM_APPS + CUSTOM_APPS + THRID_PARTY_APPS
@@ -64,6 +65,7 @@ MIDDLEWARE = [
     "django.contrib.auth.middleware.AuthenticationMiddleware",
     "django.contrib.messages.middleware.MessageMiddleware",
     "django.middleware.clickjacking.XFrameOptionsMiddleware",
+    "corsheaders.middleware.CorsMiddleware",
 ]
 
 ROOT_URLCONF = "config.urls"
@@ -151,3 +153,5 @@ REST_FRAMEWORK = {
 }
 
 CHATROOMS_MAX_SIZE = 10
+
+CORS_ALLOWED_ORIGINS = ["http://localhost:3000"]
