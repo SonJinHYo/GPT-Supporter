@@ -78,7 +78,7 @@ class SignIn(APIView):
             Response : jwt토큰 또는 오류 응답
         """
 
-        username = request.data.get("username")
+        username = request.data.get("email")
         password = request.data.get("password")
 
         if not username or not password:
