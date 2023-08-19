@@ -11,22 +11,55 @@ import {
   ModalHeader,
   ModalOverlay,
   VStack,
+  useToast,
 } from "@chakra-ui/react";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
+import { useForm } from "react-hook-form";
 import { FaUser, FaLock, FaEnvelope, FaUserSecret } from "react-icons/fa";
+import { signUp } from "../api";
 
 interface SignUpModalProps {
   isOpen: boolean;
   onClose: () => void;
 }
 
+interface ISignUp {
+  username: string;
+  email: string;
+  password: string;
+}
+
 export default function SignUpModal({ isOpen, onClose }: SignUpModalProps) {
+  const {
+    register,
+    handleSubmit,
+    formState: { errors },
+    reset,
+  } = useForm<ISignUp>();
+
+  const queryClient = useQueryClient();
+  const toast = useToast();
+  const mutation = useMutation(signUp, {
+    onSuccess: () => {
+      toast({
+        status: "success",
+        title: "Success SignUp!",
+        position: "bottom-right",
+      });
+      onClose();
+      reset();
+    },
+  });
+  const onSubmit = ({ username, password, email }: ISignUp) => {
+    mutation.mutate({ username, password, email });
+  };
   return (
     <Modal onClose={onClose} isOpen={isOpen}>
       <ModalOverlay />
       <ModalContent>
         <ModalHeader>Sign up</ModalHeader>
         <ModalCloseButton />
-        <ModalBody>
+        <ModalBody as="form" onSubmit={handleSubmit(onSubmit)}>
           <VStack>
             <InputGroup>
               <InputLeftElement
@@ -36,7 +69,13 @@ export default function SignUpModal({ isOpen, onClose }: SignUpModalProps) {
                   </Box>
                 }
               />
-              <Input variant={"filled"} placeholder="Username" />
+              <Input
+                variant={"filled"}
+                placeholder="Username"
+                {...register("username", {
+                  required: "Please write a username",
+                })}
+              />
             </InputGroup>
             <InputGroup>
               <InputLeftElement
@@ -46,7 +85,13 @@ export default function SignUpModal({ isOpen, onClose }: SignUpModalProps) {
                   </Box>
                 }
               />
-              <Input variant={"filled"} placeholder="Email" />
+              <Input
+                variant={"filled"}
+                placeholder="Email"
+                {...register("email", {
+                  required: "Please write a email",
+                })}
+              />
             </InputGroup>
             <InputGroup>
               <InputLeftElement
@@ -56,10 +101,23 @@ export default function SignUpModal({ isOpen, onClose }: SignUpModalProps) {
                   </Box>
                 }
               />
-              <Input variant={"filled"} placeholder="Password" />
+              <Input
+                variant={"filled"}
+                placeholder="Password"
+                type="password"
+                {...register("password", {
+                  required: "Please write a password",
+                })}
+              />
             </InputGroup>
           </VStack>
-          <Button mt={4} colorScheme={"red"} w="100%">
+          <Button
+            mt={4}
+            colorScheme={"red"}
+            w="100%"
+            isLoading={mutation.isLoading}
+            type="submit"
+          >
             Log in
           </Button>
         </ModalBody>

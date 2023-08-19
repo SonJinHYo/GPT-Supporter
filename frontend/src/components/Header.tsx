@@ -8,12 +8,17 @@ import {
   IconButton,
   Tooltip,
   useDisclosure,
+  useQuery,
 } from "@chakra-ui/react";
 import { Link } from "react-router-dom";
 import LoginModal from "./LoginModal";
 import SignUpModal from "./SIgnUpModal";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
+import useUser from "../lib/userUser";
 
 export default function Header() {
+  const { userLoading, isLoggedIn, user } = useUser();
+
   const {
     isOpen: isLoginOpen,
     onClose: onLoginClose,
@@ -24,6 +29,14 @@ export default function Header() {
     onClose: onSignUpClose,
     onOpen: onSignUpOpen,
   } = useDisclosure();
+
+  const queryClient = useQueryClient();
+
+  const logout = () => {
+    localStorage.removeItem("jwt"); // 토큰 삭제
+    queryClient.clear(); // 캐시 클리어
+  };
+
   return (
     <HStack
       justifyContent={"space-between"}
@@ -84,10 +97,25 @@ export default function Header() {
           aria-label="Toggle dark mode"
           icon={<FaMoon />}
         /> */}
-        <Button onClick={onLoginOpen}>Log in</Button>
-        <Button onClick={onSignUpOpen} colorScheme={"red"}>
-          Sign up
-        </Button>
+        {!userLoading ? (
+          !isLoggedIn ? (
+            <>
+              <Button onClick={onLoginOpen}>Log in</Button>
+              <Button onClick={onSignUpOpen} colorScheme={"red"}>
+                Sign up
+              </Button>
+            </>
+          ) : (
+            <Button
+              onClick={() => {
+                logout();
+                window.location.reload(); // 페이지 새로고침
+              }}
+            >
+              Log out
+            </Button>
+          )
+        ) : null}
       </HStack>
       <LoginModal isOpen={isLoginOpen} onClose={onLoginClose} />
       <SignUpModal isOpen={isSignUpOpen} onClose={onSignUpClose} />

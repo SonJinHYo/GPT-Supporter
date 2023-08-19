@@ -60,7 +60,7 @@ export default function Chatrooms() {
   };
 
   const description: string =
-    "ChatGPT와의 채팅방입니다. 설정된 system information이 적용되어 있습니다. 채팅방 카테고리에 따라 추가적인 질문이 가능하도록 세팅되어 있습니다.";
+    "ChatGPT와의 채팅방입니다. 생성시 설정한 system information이 적용되어 있습니다. 채팅방 카테고리에 따라 추가적인 질문이 가능하도록 세팅되어 있습니다.";
   const { isOpen: isOpen, onClose: onClose, onOpen: onOpen } = useDisclosure();
   return (
     <VStack align="flex-start" p="20">
