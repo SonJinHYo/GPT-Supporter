@@ -20,6 +20,23 @@ interface ICreateRefDataVariables {
   text: string;
 }
 
+interface ICreateSystemInfoVariables {
+  description: string;
+  language: string;
+  major: string;
+  understanding_level: number;
+  data_sequence: boolean;
+  only_use_reference_data: boolean;
+  ref_books_pk: number[];
+  ref_datas_pk: number[];
+}
+
+interface ICreateChatroomVariables {
+  name: string;
+  category: string;
+  systemInfoPk: number;
+}
+
 const instance = axios.create({
   baseURL: "http://127.0.0.1:8000/api/v1/",
   withCredentials: true,
@@ -124,11 +141,61 @@ export const deleteRefData = (refDataPk: number) =>
 export const getSystemInfo = () =>
   instance.get(`gpt-sys-infos/`).then((response) => response.data);
 
-export const createSystemInfo = ({ title, text }: ICreateRefDataVariables) =>
-  instance
+export const createSystemInfo = ({
+  description,
+  language,
+  major,
+  understanding_level,
+  data_sequence,
+  only_use_reference_data,
+  ref_books_pk,
+  ref_datas_pk,
+}: ICreateSystemInfoVariables) => {
+  const json_ref_books_pk = JSON.stringify(ref_books_pk);
+  const json_ref_data_pk = JSON.stringify(ref_datas_pk);
+
+  return instance
     .post(
       `gpt-sys-infos/create`,
-      { title, text },
+      {
+        description,
+        language,
+        major,
+        understanding_level,
+        data_sequence,
+        only_use_reference_data,
+        ref_books_pk: json_ref_books_pk,
+        ref_datas_pk: json_ref_data_pk,
+      },
+      {
+        headers: {
+          "X-CSRFToken": Cookie.get("csrftoken") || "",
+        },
+      }
+    )
+    .then((response) => response.data);
+};
+export const deleteSystemInfo = (refDataPk: number) =>
+  instance
+    .delete(`gpt-sys-infos/${refDataPk}`, {
+      headers: {
+        "X-CSRFToken": Cookie.get("csrftoken") || "",
+      },
+    })
+    .then((response) => response.status);
+
+export const getChatroom = () =>
+  instance.get(`chatrooms/`).then((response) => response.data);
+
+export const createChatroom = ({
+  name,
+  category,
+  systemInfoPk,
+}: ICreateChatroomVariables) =>
+  instance
+    .post(
+      `chatrooms/create`,
+      { name, category, system_info_pk: systemInfoPk },
       {
         headers: {
           "X-CSRFToken": Cookie.get("csrftoken") || "",
@@ -137,9 +204,9 @@ export const createSystemInfo = ({ title, text }: ICreateRefDataVariables) =>
     )
     .then((response) => response.data);
 
-export const deleteSystemInfo = (refDataPk: number) =>
+export const deleteChatroom = (chatroomPk: number) =>
   instance
-    .delete(`gpt-sys-infos/${refDataPk}`, {
+    .delete(`chatrooms/${chatroomPk}`, {
       headers: {
         "X-CSRFToken": Cookie.get("csrftoken") || "",
       },

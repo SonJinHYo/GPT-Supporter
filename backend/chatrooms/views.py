@@ -32,7 +32,7 @@ from gpt_sys_infos.serializers import SystemInfoDetailSerializer
 class CreateChatRoom(APIView):
     permission_classes = [IsAuthenticated]
 
-    def post(self, request, system_info_pk):
+    def post(self, request):
         user = User.objects.get(pk=request.user.pk)
 
         if user.chatrooms.count() > settings.CHATROOMS_MAX_SIZE:
@@ -42,14 +42,16 @@ class CreateChatRoom(APIView):
             )
 
         serializer = serializers.CreateChatRoomSerializer(data=request.data)
-
+        print(request.data.get("system_info_pk"))
         if not serializer.is_valid():
             return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
         try:
             serializer.save(
                 user=request.user,
-                system_info=SystemInfo.objects.get(pk=system_info_pk),
+                system_info=SystemInfo.objects.get(
+                    pk=request.data.get("system_info_pk")
+                ),
             )
         except:
             raise exceptions.NotFound("Not found system info pk")

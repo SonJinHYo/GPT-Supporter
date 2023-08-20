@@ -8,9 +8,8 @@ import {
   IconButton,
   Tooltip,
   useDisclosure,
-  useQuery,
 } from "@chakra-ui/react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import LoginModal from "./LoginModal";
 import SignUpModal from "./SIgnUpModal";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
@@ -29,7 +28,7 @@ export default function Header() {
     onClose: onSignUpClose,
     onOpen: onSignUpOpen,
   } = useDisclosure();
-
+  const navigate = useNavigate();
   const queryClient = useQueryClient();
 
   const logout = () => {
@@ -109,7 +108,7 @@ export default function Header() {
             <Button
               onClick={() => {
                 logout();
-                window.location.reload(); // 페이지 새로고침
+                navigate("/"); // 페이지 새로고침
               }}
             >
               Log out

@@ -114,7 +114,6 @@ export default function RefBooks() {
                   size="s"
                   color="red.400"
                   onClick={() => {
-                    // removeBook(book.pk);
                     handleRemoveBook(book.pk);
                   }}
                 />

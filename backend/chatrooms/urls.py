@@ -3,7 +3,7 @@ from . import views
 
 urlpatterns = [
     path("", views.ChatRoomsList.as_view()),
-    path("create/<int:system_info_pk>", views.CreateChatRoom.as_view()),
+    path("create", views.CreateChatRoom.as_view()),
 ]
 
 websocket_patterms = [

@@ -15,8 +15,12 @@ import {
   useDisclosure,
   VStack,
 } from "@chakra-ui/react";
+import { useMutation, useQuery } from "@tanstack/react-query";
 import { useState } from "react";
 import { Link } from "react-router-dom";
+import { deleteSystemInfo, getSystemInfo } from "../api";
+import ChatroomModal from "../components/ChatroomModal";
+import Loading from "../components/Loading";
 import SystemInfoModal from "../components/SystemInfoModal";
 
 interface ISystemInfoData {
@@ -74,17 +78,37 @@ export default function SystemInfo() {
   ];
 
   const [systemInfos, setSystemInfos] = useState<ISystemInfoData[]>(testData);
+  const [systemInfoPk, setSystemInfoPk] = useState<number>(-1);
+  const { isLoading, data } = useQuery<ISystemInfoData[]>(
+    ["system-info"],
+    getSystemInfo
+  );
+  if (!isLoading && data && data !== systemInfos) {
+    setSystemInfos(data);
+  }
 
-  const removeSystemInfo = (pk: number) => {
-    const updateData = systemInfos.filter((data) => data.pk !== pk);
-    setSystemInfos(updateData);
+  const mutation = useMutation(deleteSystemInfo, {
+    onSuccess: (data) => {
+      window.location.reload();
+    },
+  });
+
+  const handleRemoveData = (pk: number) => {
+    mutation.mutate(pk); // deleteRefData 요청 실행
   };
 
   const description: string =
     "ChatGPT 채팅을 시작하기 전에 ChatGPT에게 전달할 정보입니다. \
     시작된 채팅은 제공된 System Information을 기본값으로 시작됩니다. ";
   const { isOpen: isOpen, onClose: onClose, onOpen: onOpen } = useDisclosure();
-  return (
+  const {
+    isOpen: isChatroomOpen,
+    onClose: onChatroomClose,
+    onOpen: onChatroomOpen,
+  } = useDisclosure();
+  return isLoading ? (
+    <Loading />
+  ) : (
     <VStack align="flex-start" p="20" w="100%">
       <HStack spacing="6">
         <Heading>System Information</Heading>
@@ -116,7 +140,7 @@ export default function SystemInfo() {
                   icon={<SmallCloseIcon />}
                   size="s"
                   color="red.400"
-                  onClick={() => removeSystemInfo(data.pk)}
+                  onClick={() => handleRemoveData(data.pk)}
                 />
               </HStack>
             </CardHeader>
@@ -135,16 +159,26 @@ export default function SystemInfo() {
                 {data.only_use_reference_data ? "O" : "X"}
               </Text>
               <Text>참조 자료 순서 유무: {data.data_sequence ? "O" : "X"}</Text>
-              {/* <Text>
-                {audio.modified_script.length > 100
-                  ? `${audio.modified_script.slice(0, 97)}...`
-                  : audio.modified_script}
-              </Text> */}
             </CardBody>
+            <CardFooter>
+              <Button
+                onClick={() => {
+                  setSystemInfoPk(data.pk);
+                  onChatroomOpen();
+                }}
+              >
+                Create Chatroom
+              </Button>
+            </CardFooter>
           </Card>
         ))}
       </SimpleGrid>
       <SystemInfoModal isOpen={isOpen} onClose={onClose} />
+      <ChatroomModal
+        isOpen={isChatroomOpen}
+        onClose={onChatroomClose}
+        systemInfoPk={systemInfoPk}
+      />
     </VStack>
   );
 }
