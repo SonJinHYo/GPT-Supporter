@@ -7,6 +7,7 @@ import RefBooks from "./routes/RefBooks";
 import RefData from "./routes/RefData";
 import SystemInfo from "./routes/systemInfo";
 import Users from "./routes/Users";
+import WebSocketChat from "./routes/WebSocketChat";
 
 const router = createBrowserRouter([
   {
@@ -33,6 +34,10 @@ const router = createBrowserRouter([
       {
         path: "chatrooms",
         element: <Chatrooms />,
+      },
+      {
+        path: "chattings/:chatroomPk",
+        element: <WebSocketChat />,
       },
     ],
   },

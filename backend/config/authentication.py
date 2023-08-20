@@ -27,7 +27,12 @@ class JWTAuthentication(BaseAuthentication):
 
 def ws_authenticate(scope):
     headers = dict(scope["headers"])
-    token = headers[b"jwt"].decode("utf-8")
+    token = ""
+    print(dict(scope))
+    if b"jwt" in headers:
+        token = headers[b"jwt"].decode("utf-8")
+    else:
+        token = scope["query_string"].decode("utf-8")
     # token = request["headers"]["Jwt"]
     if not token:
         return None

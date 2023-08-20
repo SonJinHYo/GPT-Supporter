@@ -98,32 +98,34 @@ export default function Chatrooms() {
           onClick={onOpen}
         />
         {chatrooms?.map((chatroom) => (
-          <Card key={chatroom.pk}>
-            <CardHeader>
-              <HStack justifyContent="space-between">
-                <Heading size="md"> {chatroom.name}</Heading>
-                <IconButton
-                  aria-label="card-header"
-                  icon={<SmallCloseIcon />}
-                  size="s"
-                  color="red.400"
-                  onClick={() => {
-                    handleRemoveChatroom(chatroom.pk);
-                  }}
-                />
-              </HStack>
-            </CardHeader>
-            <CardBody>
-              <Text>system information description</Text>
-              <Text mt="2">
-                -{" "}
-                {chatroom.system_info_description !== ""
-                  ? chatroom.system_info_description
-                  : " X "}
-              </Text>
-              <Text mt="4">Category : {chatroom.category}</Text>
-            </CardBody>
-          </Card>
+          <Link to={`/chattings/${chatroom.pk}`}>
+            <Card key={chatroom.pk}>
+              <CardHeader>
+                <HStack justifyContent="space-between">
+                  <Heading size="md"> {chatroom.name}</Heading>
+                  <IconButton
+                    aria-label="card-header"
+                    icon={<SmallCloseIcon />}
+                    size="s"
+                    color="red.400"
+                    onClick={() => {
+                      handleRemoveChatroom(chatroom.pk);
+                    }}
+                  />
+                </HStack>
+              </CardHeader>
+              <CardBody>
+                <Text>system information description</Text>
+                <Text mt="2">
+                  -{" "}
+                  {chatroom.system_info_description !== ""
+                    ? chatroom.system_info_description
+                    : " X "}
+                </Text>
+                <Text mt="4">Category : {chatroom.category}</Text>
+              </CardBody>
+            </Card>
+          </Link>
         ))}
       </SimpleGrid>
       <RefBookModal isOpen={isOpen} onClose={onClose} />

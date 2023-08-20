@@ -143,6 +143,7 @@ class ChatRoomsDetail(JsonWebsocketConsumer):
 
     def get_chatroom(self):
         self.user, _ = ws_authenticate(self.scope)
+        print(self.scope)
         chatroom_pk = self.scope["url_route"]["kwargs"]["chatroom_pk"]
         try:
             return ChatRoom.objects.get(pk=chatroom_pk)
