@@ -47,6 +47,7 @@ CUSTOM_APPS = [
     "users.apps.UsersConfig",
     "gpt_sys_infos.apps.GPTSysInfosConfig",
     "chatrooms.apps.ChatroomsConfig",
+    "dialogues.apps.DialoguesConfig",
 ]
 
 THRID_PARTY_APPS = [
