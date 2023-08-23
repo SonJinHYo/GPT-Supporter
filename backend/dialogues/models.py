@@ -5,9 +5,10 @@ from django.db import models
 
 class Dialogue(models.Model):
     system_info = models.ForeignKey(
-        "gpt_sys_info.SystemInfo",
+        "gpt_sys_infos.SystemInfo",
         on_delete=models.SET_NULL,
         related_name="dialogue",
+        null=True,
     )
 
 

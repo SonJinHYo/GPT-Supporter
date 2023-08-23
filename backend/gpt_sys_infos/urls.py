@@ -5,6 +5,7 @@ urlpatterns = [
     path("", views.SystemInfosList.as_view(), name="sysinfo-list"),
     path("create", views.CreateSystemInfo.as_view(), name="create-sysinfo"),
     path("<int:pk>", views.SystemInfoDetail.as_view(), name="detail"),
+    path("<int:pk>/dialogues", views.DialogueDetail.as_view(), name="dialogues"),
     path("refbook", views.RefBooksList.as_view(), name="refbook"),
     path("refbook/create", views.CreateRefBook.as_view(), name="create-refbook"),
     path("refbook/<int:pk>", views.RefBookDetail.as_view(), name="refbook-detail"),
