@@ -79,16 +79,17 @@ export default function Header() {
             />
           </Tooltip>
         </Link>
-        <Link to={"chatrooms"}>
-          <Tooltip label="채팅방">
-            <IconButton
-              aria-label={"Ref-Books"}
-              icon={<BsChatLeft size="24" />}
-              variant="ghost"
-              alignSelf="flex-end"
-            />
-          </Tooltip>
-        </Link>
+        {/* <Link to={"chatrooms"}> */}
+        <Tooltip label="채팅방(미완)">
+          <IconButton
+            isDisabled
+            aria-label={"Ref-Books"}
+            icon={<BsChatLeft size="24" />}
+            variant="ghost"
+            alignSelf="flex-end"
+          />
+        </Tooltip>
+        {/* </Link> */}
       </HStack>
       <HStack spacing={2}>
         {/* <IconButton

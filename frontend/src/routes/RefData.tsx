@@ -70,8 +70,7 @@ export default function RefDatas() {
   //   setData(updateData);
   // };
   const description: string =
-    "ChatGPT에게 알려줄 자료 정보입니다. \
-    저장된 자료는 GPT설정 페이지에서 선택하여 추가합니다.";
+    "참고 자료 목록입니다. 이곳에 저장된 자료 정보는 ChatGPT에게 알려줄 참고 자료로 선택할 수 있습니다.";
   const { isOpen: isOpen, onClose: onClose, onOpen: onOpen } = useDisclosure();
   return isLoading ? (
     <Loading />
@@ -83,6 +82,11 @@ export default function RefDatas() {
           <IconButton aria-label={"heading"} icon={<QuestionIcon />} />
         </Tooltip>
       </HStack>
+      <Text>
+        한번에 4000자만 저장되기 때문에 참고 자료의 양이 방대하다면 끊어서
+        저장하시는걸 권장합니다.
+      </Text>
+      <Text>이후 참고 자료 선택시 순서 선택이 가능합니다.</Text>
       <SimpleGrid
         w="80%"
         m={8}

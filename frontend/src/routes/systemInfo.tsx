@@ -100,7 +100,7 @@ export default function SystemInfo() {
 
   const description: string =
     "ChatGPT 채팅을 시작하기 전에 ChatGPT에게 전달할 정보입니다. \
-    시작된 채팅은 제공된 System Information을 기본값으로 시작됩니다. ";
+    생성 후 Get Scripts를 누르면 GPT 채팅을 시작하기 전에 전할 스크립트를 제공합니다. ";
   const { isOpen: isOpen, onClose: onClose, onOpen: onOpen } = useDisclosure();
   const {
     isOpen: isChatroomOpen,

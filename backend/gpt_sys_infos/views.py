@@ -146,7 +146,13 @@ class DialogueDetail(APIView):
         return Response(dialogues, status=status.HTTP_200_OK)
 
     def generate_dialogue(self, system_info):
-        level = {1: "freshman", 2: "sophomore", 3: "junior", 4: "senior"}
+        level = {
+            1: "freshman",
+            2: "sophomore",
+            3: "junior",
+            4: "senior",
+            5: "graduate student",
+        }
         language = "Korean" if system_info["language"] == "ko" else "English"
         major = system_info["major"]
         understanding_level = level[system_info["understanding_level"]]

@@ -19,7 +19,8 @@ import { useMutation } from "@tanstack/react-query";
 import { useForm } from "react-hook-form";
 import { FaEnvelope, FaLock } from "react-icons/fa";
 import { createRefData } from "../api";
-
+import { MdTitle } from "react-icons/md";
+import { GrTextAlignFull } from "react-icons/gr";
 interface RefDataModalProps {
   isOpen: boolean;
   onClose: () => void;
@@ -58,7 +59,7 @@ export default function RefDataModal({ isOpen, onClose }: RefDataModalProps) {
               <InputLeftElement
                 children={
                   <Box color="gray.500">
-                    <FaEnvelope />
+                    <MdTitle />
                   </Box>
                 }
               />
@@ -70,6 +71,7 @@ export default function RefDataModal({ isOpen, onClose }: RefDataModalProps) {
                 })}
               />
             </InputGroup>
+
             <Textarea
               variant={"filled"}
               placeholder="본문"

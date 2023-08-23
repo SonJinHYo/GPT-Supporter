@@ -15,8 +15,9 @@ import {
 } from "@chakra-ui/react";
 import { useMutation } from "@tanstack/react-query";
 import { useForm } from "react-hook-form";
-import { FaEnvelope, FaLock } from "react-icons/fa";
+import { FaUser } from "react-icons/fa";
 import { createRefBook } from "../api";
+import { MdTitle } from "react-icons/md";
 
 interface RefBookModalProps {
   isOpen: boolean;
@@ -57,7 +58,7 @@ export default function RefBookModal({ isOpen, onClose }: RefBookModalProps) {
               <InputLeftElement
                 children={
                   <Box color="gray.500">
-                    <FaEnvelope />
+                    <MdTitle />
                   </Box>
                 }
               />
@@ -73,7 +74,7 @@ export default function RefBookModal({ isOpen, onClose }: RefBookModalProps) {
               <InputLeftElement
                 children={
                   <Box color="gray.500">
-                    <FaLock />
+                    <FaUser />
                   </Box>
                 }
               />
@@ -87,8 +88,9 @@ export default function RefBookModal({ isOpen, onClose }: RefBookModalProps) {
             </InputGroup>
           </VStack>
           <Button
-            mt={4}
-            colorScheme={"red"}
+            mt="10"
+            mb="10"
+            colorScheme={"teal"}
             w="100%"
             isLoading={mutation.isLoading}
             type="submit"

@@ -147,12 +147,33 @@ export default function SystemInfoModal({
         <ModalCloseButton />
         <ModalBody as="form" onSubmit={handleSubmit(onSubmit)}>
           <VStack>
-            <VStack justifyContent="start">
+            <Text fontSize="2xl" fontStyle="italic">
+              Tip
+            </Text>
+            <VStack
+              justifyContent="start"
+              w="70%"
+              align="flex-start"
+              spacing="5"
+              mt="4"
+              mb="8"
+            >
               <Text>
-                * 관련 전공은 본인의 전공이 아닌 GPT에게 질문할 전공입니다.
+                * 시스템 설정 설명은 GPT에게 전할 내용이 아닌 사용자가 알아보기
+                쉽도록 간단히 설명을 달아놓는 부분입니다.
               </Text>
-              <Text color="gray.400">
-                (영어 권장 ex - Physics, Electrical engineering)
+              <Box>
+                <Text>
+                  * 관련 전공은 본인의 전공이 아닌 GPT에게 질문할 전공입니다.
+                </Text>
+                <Text color="gray.400" fontSize="sm">
+                  (영어 권장 ex - Physics, Electrical engineering)
+                </Text>
+              </Box>
+              <Text>
+                * 석사 수준의 대답을 받길 원한다면 답변 수준에 '5'를
+                입력해주세요. 석사 수준은 참고 자료를 적용하고 것을 권장하고,
+                박사 이상의 수준은 ChatGPT 이외의 수단을 권장합니다.
               </Text>
             </VStack>
             <Textarea
@@ -172,13 +193,6 @@ export default function SystemInfoModal({
               <option value="en">English</option>
             </Select>
             <InputGroup>
-              <InputLeftElement
-                children={
-                  <Box color="gray.500">
-                    <FaLock />
-                  </Box>
-                }
-              />
               <Input
                 variant={"filled"}
                 placeholder="관련 전공"
@@ -188,13 +202,6 @@ export default function SystemInfoModal({
               />
             </InputGroup>
             <InputGroup>
-              <InputLeftElement
-                children={
-                  <Box color="gray.500">
-                    <FaLock />
-                  </Box>
-                }
-              />
               <Input
                 variant={"filled"}
                 placeholder="답변 수준           (대학 학년 기준 [1 ~ 5])"
@@ -323,7 +330,7 @@ export default function SystemInfoModal({
           <Button
             mt="20"
             mb="10"
-            colorScheme={"red"}
+            colorScheme="teal"
             w="100%"
             isLoading={mutation.isLoading}
             type="submit"

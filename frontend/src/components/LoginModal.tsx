@@ -97,8 +97,9 @@ export default function LoginModal({ isOpen, onClose }: LoginModalProps) {
             </InputGroup>
           </VStack>
           <Button
-            mt={4}
-            colorScheme={"red"}
+            mt="10"
+            mb="10"
+            colorScheme="teal"
             w="100%"
             isLoading={mutation.isLoading}
             type="submit"

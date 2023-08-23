@@ -77,7 +77,7 @@ export default function RefBooks() {
   // };
 
   const description: string =
-    "ChatGPT에게 사용하고 있는 책 정보를 알려줍니다. 저장된 책은 GPT설정 페이지에서 선택하여 추가합니다.";
+    "참고 서적 목록입니다. 이곳에 저장된 책 정보는 ChatGPT에게 알려줄 참고 서적으로 선택할 수 있습니다.";
   const { isOpen: isOpen, onClose: onClose, onOpen: onOpen } = useDisclosure();
   return isLoading ? (
     <Loading />
@@ -89,6 +89,13 @@ export default function RefBooks() {
           <IconButton aria-label={"heading"} icon={<QuestionIcon />} />
         </Tooltip>
       </HStack>
+      <Text>
+        ChatGPT는 영어 기반 데이터를 가지고 있기 때문에 원문 서적, 영문 책을
+        권장합니다.
+      </Text>
+      <Text color="whiteAlpha.700" fontSize="sm">
+        한국어로 이루어진 책도 불가능하지 않습니다!
+      </Text>
       <SimpleGrid
         w="80%"
         m={8}
