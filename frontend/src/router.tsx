@@ -1,6 +1,7 @@
 import { createBrowserRouter } from "react-router-dom";
 import Root from "./components/Root";
 import Chatrooms from "./routes/Chatrooms";
+import Dialogues from "./routes/Dialogues";
 import Home from "./routes/Home";
 import NotFound from "./routes/NotFound";
 import RefBooks from "./routes/RefBooks";
@@ -38,6 +39,10 @@ const router = createBrowserRouter([
       {
         path: "chattings/:chatroomPk",
         element: <WebSocketChat />,
+      },
+      {
+        path: "system-info/:systemInfoPk/dialogues",
+        element: <Dialogues />,
       },
     ],
   },

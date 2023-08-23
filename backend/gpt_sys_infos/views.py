@@ -168,7 +168,7 @@ class DialogueDetail(APIView):
             )
             for ref_book in ref_books:
                 dialogue_list.append(f"'{ref_book['author']} - {ref_book['title']}', ")
-        dialogue_list.append("I have finished providing reference books.")
+            dialogue_list.append("I have finished providing reference books.")
 
         if ref_datas:
             user_role_data_content = 'I have reference materials. Each piece of material is enclosed within three double quotation marks in the following format:"""title: , content: """.  Please gather my information until I say "I have finished providing reference materials."'
@@ -186,7 +186,7 @@ class DialogueDetail(APIView):
             dialogue_list.append("I have finished providing reference materials")
 
         dialogue_list.append(
-            f"After starting this chat with you, I have provided information about myself and the reference materials you will use. From now on, I will begin the chat based on the above content."
+            f"After starting this chat with you, I have provided information about myself and the reference materials you will use."
         )
         dialogue_list.append(
             f"From now on, please respond only in {language}, regardless of the language I use."

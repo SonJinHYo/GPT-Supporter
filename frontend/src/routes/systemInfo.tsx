@@ -17,7 +17,7 @@ import {
 } from "@chakra-ui/react";
 import { useMutation, useQuery } from "@tanstack/react-query";
 import { useState } from "react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { deleteSystemInfo, getSystemInfo } from "../api";
 import ChatroomModal from "../components/ChatroomModal";
 import Loading from "../components/Loading";
@@ -37,6 +37,7 @@ interface ISystemInfoData {
 }
 
 export default function SystemInfo() {
+  const nav = useNavigate();
   const testData: ISystemInfoData[] = [
     {
       pk: 1,
@@ -161,13 +162,20 @@ export default function SystemInfo() {
               <Text>참조 자료 순서 유무: {data.data_sequence ? "O" : "X"}</Text>
             </CardBody>
             <CardFooter>
-              <Button
+              {/* <Button
                 onClick={() => {
                   setSystemInfoPk(data.pk);
                   onChatroomOpen();
                 }}
               >
                 Create Chatroom
+              </Button> */}
+              <Button
+                onClick={() => {
+                  nav(`/system-info/${data.pk}/dialogues`);
+                }}
+              >
+                Get Scripts
               </Button>
             </CardFooter>
           </Card>

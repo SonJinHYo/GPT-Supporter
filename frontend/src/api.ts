@@ -1,3 +1,4 @@
+import { QueryFunctionContext } from "@tanstack/react-query";
 import axios from "axios";
 import Cookie from "js-cookie";
 
@@ -183,6 +184,14 @@ export const deleteSystemInfo = (refDataPk: number) =>
       },
     })
     .then((response) => response.status);
+
+export const getDialogue = ({ queryKey }: QueryFunctionContext) => {
+  const [_, systemInfoPk] = queryKey;
+
+  return instance
+    .get(`gpt-sys-infos/${systemInfoPk}/dialogues`)
+    .then((response) => response.data);
+};
 
 export const getChatroom = () =>
   instance.get(`chatrooms/`).then((response) => response.data);
