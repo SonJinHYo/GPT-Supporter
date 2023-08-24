@@ -11,15 +11,13 @@ import {
   ModalContent,
   ModalHeader,
   ModalOverlay,
-  Textarea,
-  useToast,
   VStack,
   Select,
 } from "@chakra-ui/react";
 import { useMutation } from "@tanstack/react-query";
 import { useForm } from "react-hook-form";
-import { FaEnvelope, FaLock } from "react-icons/fa";
-import { createChatroom, createRefData } from "../api";
+import { FaEnvelope } from "react-icons/fa";
+import { createChatroom } from "../api";
 
 interface ChatroomModalProps {
   isOpen: boolean;

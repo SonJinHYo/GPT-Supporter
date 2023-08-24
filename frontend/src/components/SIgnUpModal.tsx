@@ -15,7 +15,7 @@ import {
 } from "@chakra-ui/react";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { useForm } from "react-hook-form";
-import { FaUser, FaLock, FaEnvelope, FaUserSecret } from "react-icons/fa";
+import { FaUser, FaLock, FaEnvelope } from "react-icons/fa";
 import { signUp } from "../api";
 
 interface SignUpModalProps {

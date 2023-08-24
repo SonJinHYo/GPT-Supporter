@@ -12,7 +12,7 @@ import {
 import { Link, useNavigate } from "react-router-dom";
 import LoginModal from "./LoginModal";
 import SignUpModal from "./SIgnUpModal";
-import { useMutation, useQueryClient } from "@tanstack/react-query";
+import { useQueryClient } from "@tanstack/react-query";
 import useUser from "../lib/userUser";
 
 export default function Header() {

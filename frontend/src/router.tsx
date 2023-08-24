@@ -2,12 +2,12 @@ import { createBrowserRouter } from "react-router-dom";
 import Root from "./components/Root";
 import Chatrooms from "./routes/Chatrooms";
 import Dialogues from "./routes/Dialogues";
+import Forbidden from "./routes/Forbbiden";
 import Home from "./routes/Home";
 import NotFound from "./routes/NotFound";
 import RefBooks from "./routes/RefBooks";
 import RefData from "./routes/RefData";
 import SystemInfo from "./routes/systemInfo";
-import Users from "./routes/Users";
 import WebSocketChat from "./routes/WebSocketChat";
 
 const router = createBrowserRouter([
@@ -19,6 +19,10 @@ const router = createBrowserRouter([
       {
         path: "",
         element: <Home />,
+      },
+      {
+        path: "forbidden",
+        element: <Forbidden />,
       },
       {
         path: "books",

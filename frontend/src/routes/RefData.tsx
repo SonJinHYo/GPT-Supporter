@@ -1,10 +1,6 @@
 import { AddIcon, QuestionIcon, SmallCloseIcon } from "@chakra-ui/icons";
 import {
-  Box,
-  Button,
   Card,
-  CardBody,
-  CardFooter,
   CardHeader,
   Heading,
   HStack,
@@ -17,7 +13,7 @@ import {
 } from "@chakra-ui/react";
 import { useMutation, useQuery } from "@tanstack/react-query";
 import { useState } from "react";
-import { Link } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import { deleteRefData, getRefData } from "../api";
 import Loading from "../components/Loading";
 import RefDataModal from "../components/RefDataModal";
@@ -48,10 +44,18 @@ export default function RefDatas() {
   ];
 
   const [dataList, setDataList] = useState<IRefDataData[]>(testData);
-  const { isLoading, data } = useQuery<IRefDataData[]>(
+  const { isLoading, data, isError, error } = useQuery<IRefDataData[]>(
     ["ref-data"],
-    getRefData
+    getRefData,
+    {
+      retry: false,
+    }
   );
+  const nav = useNavigate();
+  if (isError && (error as any)?.response.status === 403) {
+    console.log(error);
+    nav("/forbidden");
+  }
   if (!isLoading && data && data !== dataList) {
     setDataList(data);
   }
@@ -91,18 +95,19 @@ export default function RefDatas() {
         w="80%"
         m={8}
         spacing={10}
-        templateColumns="repeat(auto-fill, minmax(300px, 1fr))"
+        templateColumns="repeat(auto-fill, minmax(400px, 1fr))"
       >
         <IconButton
           w="100%"
           h="100%"
+          maxH="40%"
           aria-label={" "}
           icon={<AddIcon />}
           size="lg"
           onClick={onOpen}
         />
         {dataList?.map((d) => (
-          <Card key={d.pk}>
+          <Card key={d.pk} overflow="auto" maxH="40%">
             <CardHeader>
               <HStack justifyContent="space-between">
                 <Heading size="md"> {d.title}</Heading>
@@ -116,8 +121,10 @@ export default function RefDatas() {
                   }}
                 />
               </HStack>
-              <Text>{d.text}</Text>
             </CardHeader>
+            <Text whiteSpace="pre-line" p="7">
+              {d.text}
+            </Text>
             {/* <CardFooter>
               <Button onClick={() => handleOpenModal(audio)}> View Here</Button>
             </CardFooter> */}

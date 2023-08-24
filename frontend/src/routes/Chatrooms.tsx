@@ -1,15 +1,7 @@
+import { AddIcon, QuestionIcon, SmallCloseIcon } from "@chakra-ui/icons";
 import {
-  AddIcon,
-  CloseIcon,
-  QuestionIcon,
-  SmallCloseIcon,
-} from "@chakra-ui/icons";
-import {
-  Box,
-  Button,
   Card,
   CardBody,
-  CardFooter,
   CardHeader,
   Heading,
   HStack,

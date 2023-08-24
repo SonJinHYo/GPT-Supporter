@@ -1,29 +1,19 @@
-import { FaHome, FaBook, FaFileAlt, FaIcons } from "react-icons/fa";
-import { RiOpenaiFill } from "react-icons/ri";
-import { BsChatLeft } from "react-icons/bs";
+import { CopyIcon } from "@chakra-ui/icons";
+
 import {
   Box,
-  Button,
   HStack,
   IconButton,
-  Tooltip,
-  useDisclosure,
   VStack,
   Text,
   Heading,
   Center,
-  SimpleGrid,
-  GridItem,
-  Grid,
   useToast,
 } from "@chakra-ui/react";
-import { Link, useNavigate, useParams } from "react-router-dom";
-import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
-import useUser from "../lib/userUser";
+import { useParams } from "react-router-dom";
+import { useQuery } from "@tanstack/react-query";
 import { getDialogue } from "../api";
 import Loading from "../components/Loading";
-import Header from "../components/Header";
-import { useRef, useState } from "react";
 
 export default function Dialogues() {
   const { systemInfoPk } = useParams();
@@ -86,9 +76,9 @@ export default function Dialogues() {
               rounded="10"
               position="relative"
             >
-              <Text>{dialogue}</Text>
+              <Text whiteSpace="pre-line">{dialogue}</Text>
               <IconButton
-                icon={<FaBook />}
+                icon={<CopyIcon />}
                 aria-label="Copy"
                 size="xs"
                 color="white.100"

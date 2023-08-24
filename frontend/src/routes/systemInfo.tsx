@@ -1,6 +1,5 @@
 import { AddIcon, QuestionIcon, SmallCloseIcon } from "@chakra-ui/icons";
 import {
-  Box,
   Button,
   Card,
   CardBody,
@@ -17,7 +16,7 @@ import {
 } from "@chakra-ui/react";
 import { useMutation, useQuery } from "@tanstack/react-query";
 import { useState } from "react";
-import { Link, useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import { deleteSystemInfo, getSystemInfo } from "../api";
 import ChatroomModal from "../components/ChatroomModal";
 import Loading from "../components/Loading";
@@ -80,10 +79,16 @@ export default function SystemInfo() {
 
   const [systemInfos, setSystemInfos] = useState<ISystemInfoData[]>(testData);
   const [systemInfoPk, setSystemInfoPk] = useState<number>(-1);
-  const { isLoading, data } = useQuery<ISystemInfoData[]>(
+  const { isLoading, data, isError, error } = useQuery<ISystemInfoData[]>(
     ["system-info"],
-    getSystemInfo
+    getSystemInfo,
+    { retry: false }
   );
+
+  if (isError && (error as any)?.response.status === 403) {
+    console.log(error);
+    nav("/forbidden");
+  }
   if (!isLoading && data && data !== systemInfos) {
     setSystemInfos(data);
   }

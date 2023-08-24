@@ -1,5 +1,4 @@
 import {
-  Text,
   Box,
   Button,
   Input,
@@ -12,15 +11,12 @@ import {
   ModalHeader,
   ModalOverlay,
   Textarea,
-  useToast,
   VStack,
 } from "@chakra-ui/react";
 import { useMutation } from "@tanstack/react-query";
 import { useForm } from "react-hook-form";
-import { FaEnvelope, FaLock } from "react-icons/fa";
 import { createRefData } from "../api";
 import { MdTitle } from "react-icons/md";
-import { GrTextAlignFull } from "react-icons/gr";
 interface RefDataModalProps {
   isOpen: boolean;
   onClose: () => void;
@@ -82,8 +78,8 @@ export default function RefDataModal({ isOpen, onClose }: RefDataModalProps) {
             />
           </VStack>
           <Button
-            mt={4}
-            colorScheme={"red"}
+            my="10"
+            colorScheme="teal"
             w="100%"
             isLoading={mutation.isLoading}
             type="submit"

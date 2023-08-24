@@ -24,7 +24,6 @@ const theme = extendTheme({
 const MotionVStack = motion(VStack);
 
 export default function Sidebar() {
-  //   const [isOpen, setIsOpen] = useState(true);
   const { isOpen, onToggle } = useDisclosure();
 
   return (

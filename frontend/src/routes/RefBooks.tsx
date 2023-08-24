@@ -1,15 +1,6 @@
+import { AddIcon, QuestionIcon, SmallCloseIcon } from "@chakra-ui/icons";
 import {
-  AddIcon,
-  CloseIcon,
-  QuestionIcon,
-  SmallCloseIcon,
-} from "@chakra-ui/icons";
-import {
-  Box,
-  Button,
   Card,
-  CardBody,
-  CardFooter,
   CardHeader,
   Heading,
   HStack,
@@ -18,12 +9,11 @@ import {
   Text,
   Tooltip,
   useDisclosure,
-  useToast,
   VStack,
 } from "@chakra-ui/react";
 import { useMutation, useQuery } from "@tanstack/react-query";
 import { useState } from "react";
-import { Link } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import { deleteRefBook, getRefBooks } from "../api";
 import Loading from "../components/Loading";
 import RefBookModal from "../components/RefbookModal";
@@ -54,10 +44,19 @@ export default function RefBooks() {
   ];
   // const [deleteBookPk, setDeleteBookPk] = useState<number>(-1);
   const [books, setBooks] = useState<IRefBookData[]>(testBooks);
-  const { isLoading, data } = useQuery<IRefBookData[]>(
+  const { isLoading, data, isError, error } = useQuery<IRefBookData[]>(
     ["ref-books"],
-    getRefBooks
+    getRefBooks,
+    {
+      retry: false,
+    }
   );
+  const nav = useNavigate();
+  if (isError && (error as any)?.response.status === 403) {
+    console.log(error);
+    nav("/forbidden");
+  }
+
   if (!isLoading && data && books !== data) {
     setBooks(data);
   }

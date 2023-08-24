@@ -5,29 +5,23 @@ import {
   HStack,
   Input,
   InputGroup,
-  InputLeftElement,
   Modal,
   ModalBody,
   ModalCloseButton,
   ModalContent,
   ModalHeader,
   ModalOverlay,
-  Radio,
-  RadioGroup,
-  Stack,
   VStack,
   Select,
   useToast,
   Textarea,
   Checkbox,
-  SimpleGrid,
   Grid,
   GridItem,
 } from "@chakra-ui/react";
 import { useMutation, useQuery } from "@tanstack/react-query";
 import { useState } from "react";
 import { useForm } from "react-hook-form";
-import { FaEnvelope, FaLock } from "react-icons/fa";
 import { createSystemInfo, getRefBooks, getRefData } from "../api";
 import Loading from "./Loading";
 

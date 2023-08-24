@@ -1,8 +1,7 @@
 import {} from "@chakra-ui/icons";
-import { Box, Button, Input, Text, Textarea, VStack } from "@chakra-ui/react";
-import { useMutation, useQuery } from "@tanstack/react-query";
+import { Box, Button, Text, Textarea, VStack } from "@chakra-ui/react";
 import { useEffect, useState } from "react";
-import { Link, useParams } from "react-router-dom";
+import { useParams } from "react-router-dom";
 import ReactMarkdown from "react-markdown";
 
 interface IChatroom {
