@@ -6,7 +6,6 @@ from django.core.validators import (
 )
 
 
-# Create your models here.
 class SystemInfo(models.Model):
     LANGUAGES = [
         ("en", "English"),

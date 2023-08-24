@@ -12,7 +12,6 @@ from . import serializers
 import jwt
 
 
-# Create your views here.
 class SignUp(APIView):
     """회원가입 APIView"""
 

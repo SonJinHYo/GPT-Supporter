@@ -1,16 +1,13 @@
-from time import sleep
-from django.contrib.auth import authenticate
 from django.db import transaction
 
 from rest_framework.views import APIView
 
-from rest_framework.pagination import PageNumberPagination, CursorPagination
+from rest_framework.pagination import PageNumberPagination
 from rest_framework import status
 from rest_framework import exceptions
 from rest_framework.response import Response
 from rest_framework.permissions import IsAuthenticated
 
-from dialogues.models import Dialogue, DialogueContent
 from .models import RefData, SystemInfo, RefBook
 
 

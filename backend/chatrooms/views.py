@@ -1,20 +1,13 @@
-import codecs
-import json
 import os
 import pprint
 import openai
-from io import StringIO
 
 
 from channels.generic.websocket import JsonWebsocketConsumer
 
-from django.contrib.auth import authenticate
-from django.db import transaction
 from django.conf import settings
-from django.utils import encoding
 from rest_framework.views import APIView
 
-from rest_framework.pagination import PageNumberPagination, CursorPagination
 from rest_framework import status
 from rest_framework import exceptions
 from rest_framework.response import Response
