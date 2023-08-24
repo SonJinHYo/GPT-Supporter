@@ -9,3 +9,11 @@ services:
       - DJANGO_SETTINGS_MODULE=config.settings.local
     env_file:
       - ./backend/.env
+
+  nginx:
+    container_name: nginx
+    build: ./frontend
+    ports:
+      - "80:80"
+    depends_on:
+      - django
