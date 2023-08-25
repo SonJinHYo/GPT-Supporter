@@ -103,7 +103,7 @@ export default function SignUpModal({ isOpen, onClose }: SignUpModalProps) {
               />
               <Input
                 variant={"filled"}
-                placeholder="Password"
+                placeholder="Password  (8자 이상)"
                 type="password"
                 {...register("password", {
                   required: "Please write a password",

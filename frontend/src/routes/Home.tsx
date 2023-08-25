@@ -26,7 +26,11 @@ export default function Home() {
       <Heading mt="20">GPT Supporter 사용방법</Heading>
       <Text fontSize="md" color="whiteAlpha.700">
         GPT Supporter는 ChatGPT에게 질문하기 전에 사용자의 데이터를 알려주는
-        템플릿을 자동으로 생성해줍니다!
+        템플릿을 자동으로 생성해줍니다.
+      </Text>
+      <Text fontSize="md" color="whiteAlpha.700">
+        사용방법은 대략적인 가이드라인이며 각 페이지별로 부가적인 설명이
+        있습니다!
       </Text>
       <VStack>
         <VStack justifyContent="flex-start" w="70%">
