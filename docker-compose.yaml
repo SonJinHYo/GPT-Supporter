@@ -6,7 +6,7 @@ services:
     ports:
       - "8000:8000"
     environment:
-      - DJANGO_SETTINGS_MODULE=config.settings.local
+      - DJANGO_SETTINGS_MODULE=config.settings.prod
     env_file:
       - ./backend/.env
 

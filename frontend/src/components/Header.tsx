@@ -16,18 +16,21 @@ import { useQueryClient } from "@tanstack/react-query";
 import useUser from "../lib/userUser";
 
 export default function Header() {
-  const { userLoading, isLoggedIn, user } = useUser();
+  const linkUrl = "https://chat.openai.com/";
 
+  const { userLoading, isLoggedIn, user } = useUser();
   const {
     isOpen: isLoginOpen,
     onClose: onLoginClose,
     onOpen: onLoginOpen,
   } = useDisclosure();
+
   const {
     isOpen: isSignUpOpen,
     onClose: onSignUpClose,
     onOpen: onSignUpOpen,
   } = useDisclosure();
+
   const navigate = useNavigate();
   const queryClient = useQueryClient();
 
@@ -43,7 +46,7 @@ export default function Header() {
       px={10}
       borderBottomWidth={1}
     >
-      <Box color="whiteAlpha.900">
+      <Box color="whiteAlpha.900" ml="10">
         <Link to={"/"}>
           <FaHome size={"48"} />
         </Link>
@@ -101,19 +104,31 @@ export default function Header() {
           !isLoggedIn ? (
             <>
               <Button onClick={onLoginOpen}>Log in</Button>
-              <Button onClick={onSignUpOpen} colorScheme={"red"}>
+              <Button onClick={onSignUpOpen} colorScheme={"red"} mr="10">
                 Sign up
               </Button>
             </>
           ) : (
-            <Button
-              onClick={() => {
-                logout();
-                navigate("/"); // 페이지 새로고침
-              }}
-            >
-              Log out
-            </Button>
+            <>
+              <Tooltip label="ChatGPT 바로가기">
+                <Button
+                  onClick={() => {
+                    window.open(linkUrl, "_blank");
+                  }}
+                >
+                  Go ChatGPT
+                </Button>
+              </Tooltip>
+              <Button
+                mr="10"
+                onClick={() => {
+                  logout();
+                  navigate("/"); // 페이지 새로고침
+                }}
+              >
+                Log out
+              </Button>
+            </>
           )
         ) : null}
       </HStack>
