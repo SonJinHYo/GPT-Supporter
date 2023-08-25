@@ -13,7 +13,7 @@ import {
   VStack,
   useToast,
 } from "@chakra-ui/react";
-import { useMutation, useQueryClient } from "@tanstack/react-query";
+import { useMutation } from "@tanstack/react-query";
 import { useForm } from "react-hook-form";
 import { FaUser, FaLock, FaEnvelope } from "react-icons/fa";
 import { signUp } from "../api";
@@ -37,7 +37,6 @@ export default function SignUpModal({ isOpen, onClose }: SignUpModalProps) {
     reset,
   } = useForm<ISignUp>();
 
-  const queryClient = useQueryClient();
   const toast = useToast();
   const mutation = useMutation(signUp, {
     onSuccess: () => {
