@@ -21,4 +21,4 @@ EXPOSE ${DEFAULT_PORT}
 COPY build.sh /build.sh
 RUN chmod +x /build.sh
 
-ENTRYPOINT ["/prod_build.sh"]
+ENTRYPOINT ["/local_build.sh"]

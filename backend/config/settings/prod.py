@@ -9,6 +9,8 @@ ALLOWED_HOSTS = [
     "ecs-alb-1087560193.ap-northeast-2.elb.amazonaws.com",
 ]
 
+WSGI_APPLICATION = "config.wsgi.prod.application"
+
 DATABASES = {
     "default": {
         "ENGINE": "django.db.backends.mysql",  # engine: mysql
