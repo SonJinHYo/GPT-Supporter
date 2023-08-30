@@ -18,7 +18,7 @@ ARG DEFAULT_PORT=8000
 EXPOSE ${DEFAULT_PORT}
 
 
-COPY build.sh /build.sh
-RUN chmod +x /build.sh
+COPY local_build.sh /local_build.sh
+RUN chmod +x /local_build.sh
 
 ENTRYPOINT ["/local_build.sh"]
