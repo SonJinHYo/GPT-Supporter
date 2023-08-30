@@ -7,6 +7,8 @@ from rest_framework.permissions import IsAuthenticated
 
 from django.conf import settings
 
+from users.models import User
+
 from . import serializers
 
 import jwt
@@ -19,8 +21,9 @@ class SignUp(APIView):
         """회원가입 post 요청 처리
 
         Parameters:
+            username (str) : 회원가입 username (로그인에 사용)
             email (str) : 회원가입 email
-            password (str) : 회원가입 password
+            password (str) : 회원가입 password (로그인에 사용)
 
         Raises:
             exceptions.ParseError: email,password 누락으로 회원가입 실패시 에러
@@ -49,11 +52,12 @@ class SignUp(APIView):
 class SignIn(APIView):
     """jwt로그인 APIView"""
 
-    def generate_token(self, user):
-        """토큰 발행 함수
+    def generate_token(self, user: User) -> str:
+        """jwt토큰 발행 함수
 
         Args:
             user (models.User): 인증된 유저 객체
+            key (str) : django 내부 인증키
 
         Returns:
             token (str): jwt토큰
@@ -100,9 +104,16 @@ class SignIn(APIView):
 
 
 class Me(APIView):
+    """유저 자기자신 정보 APIView"""
+
     permission_classes = [IsAuthenticated]
 
     def get(self, reqest):
+        """유저 정보 요청 함수
+
+        Returns:
+            Response : 유저 정보 Response 객체로 반환
+        """
         user = reqest.user
         serializer = serializers.UserPrivateSerializer(user)
         return Response(
@@ -111,6 +122,11 @@ class Me(APIView):
         )
 
     def put(self, request):
+        """유저 정보 수정요청 함수
+
+        Returns:
+            Response : 유저 정보 수정 처리상태 반환
+        """
         user = request.user
         serializer = serializers.UserPrivateSerializer(
             user,
