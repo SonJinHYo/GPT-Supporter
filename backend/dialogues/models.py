@@ -1,6 +1,7 @@
 from django.db import models
 
 
+# 미사용 상태
 class Dialogue(models.Model):
     system_info = models.ForeignKey(
         "gpt_sys_infos.SystemInfo",
@@ -16,5 +17,9 @@ class DialogueContent(models.Model):
         on_delete=models.CASCADE,
         related_name="contents",
     )
-    number = models.PositiveSmallIntegerField()
-    text = models.TextField()
+    number = models.PositiveSmallIntegerField(
+        verbose_name="dialogue 정렬 기준",
+    )
+    text = models.TextField(
+        verbose_name="dialogue 내용",
+    )
