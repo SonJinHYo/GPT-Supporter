@@ -17,16 +17,38 @@ import json
 
 
 class CreateSystemInfo(APIView):
+    """SystemInfo 생성 APIView"""
+
     permission_classes = [IsAuthenticated]
 
     def post(self, request):
+        """SystemInfo 생성 요청 함수
+
+        Parameters:
+            serializer (dict) : key값 - description, language, major, understanding_level, only_use_reference_data
+            new_system_info (.models.SystemInfo) : 새롭게 생성된 SystemInfo 객체
+            related_model : RefBook 또는 RefData 모델
+            related_objects (list) : RefBook 또는 RefData 객체 리스트
+
+        Raises:
+            exceptions.ParseError: ref_books 또는 ref_datas 의 pk가 존재하지 않는 경우
+
+        Returns:
+            Response : SystemInfo 생성 처리상태 반환
+        """
+
+        # 요청받은 데이터를 직렬화
         serializer = serializers.CreateSystemInfoSerializer(data=request.data)
 
         if not serializer.is_valid():
             return Response(status=status.HTTP_400_BAD_REQUEST)
 
+        # save이후 추가 데이터가 생성될 수 있기에 atomic함수로 원자화
         with transaction.atomic():
             new_system_info = serializer.save(user=request.user)
+
+            # 요청받은 데이터 중 ref_boos, ref_datas의 pk리스트를 받음
+            # pk리스트의 원소가 존재한다면 해당 pk의 객체들을 `new_system_info` 객체와 연결
             for field_name in ["ref_books_pk", "ref_datas_pk"]:
                 if field_name in request.data:
                     try:
@@ -37,6 +59,9 @@ class CreateSystemInfo(APIView):
                         related_objects = [
                             related_model.objects.get(pk=pk) for pk in pk_list
                         ]
+
+                        # getattr을 통해 new_system_info의 ref_book(or ref_datas) 필드를 불러옵니다.
+                        # ForeignKey이기 때문에 set() 함수를 통해 객체리스트를 지정합니다.
                         getattr(new_system_info, field_name.replace("_pk", "")).set(
                             related_objects
                         )
