@@ -72,9 +72,20 @@ class CreateSystemInfo(APIView):
 
 
 class SystemInfosList(APIView):
+    """요약된 SystemInfo 리스트 APIView"""
+
     permission_classes = [IsAuthenticated]
 
     def get(self, request):
+        """SystemInfo 리스트 요청 함수
+
+        Parameters:
+            queryset (list(SystemInfo)) : 유저가 가진 SystemInfo 리스트
+            paginated_system_infos (list(SystemInfo)) : 유저가 가진 SystemInfo 리스트를 페이지네이션한 리스트
+
+        Returns:
+            Response : 페이지별 데이터 및 상태 반환
+        """
         queryset = SystemInfo.objects.filter(user=request.user)
         pagination = PageNumberPagination()
         paginated_system_infos = pagination.paginate_queryset(
@@ -86,8 +97,10 @@ class SystemInfosList(APIView):
             paginated_system_infos,
             many=True,
         )
-        print(serializer.data)
-        return Response(serializer.data, status=status.HTTP_200_OK)
+        return Response(
+            serializer.data,
+            status=status.HTTP_200_OK,
+        )
 
 
 class SystemInfoDetail(APIView):
