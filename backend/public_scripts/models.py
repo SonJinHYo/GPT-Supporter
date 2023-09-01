@@ -29,7 +29,7 @@ class Script(models.Model):
         ],
     )
 
-    script = models.TextField(
+    text = models.TextField(
         verbose_name="스크립트",
         help_text="ChatGPT에게 전달할 스크립트",
     )
