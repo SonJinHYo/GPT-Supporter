@@ -21,5 +21,5 @@ class ScriptAdmin(admin.ModelAdmin):
 
     list_display = ("fk_and_number",)
 
-    def summfk_and_numberary(self, obj: Script):
+    def fk_and_number(self, obj: Script):
         return f"{obj.public_script.name} - {obj.number} 스크립트"
