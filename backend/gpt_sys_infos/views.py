@@ -112,7 +112,7 @@ class SystemInfoDetail(APIView):
 
     permission_classes = [IsAuthenticated]
 
-    def get_object(self, pk: int) -> SystemInfo:
+    def get_object(self, pk) -> SystemInfo:
         """
         Raises:
             exceptions.NotFound: pk값에 맞는 객체가 없을 때
@@ -126,7 +126,7 @@ class SystemInfoDetail(APIView):
         except:
             raise exceptions.NotFound()
 
-    def get(self, request, pk: int):
+    def get(self, request, pk):
         """특정 SystemInfo 객체 반환
 
         Returns:
@@ -139,7 +139,7 @@ class SystemInfoDetail(APIView):
             status=status.HTTP_200_OK,
         )
 
-    def put(self, request, pk: int):
+    def put(self, request, pk):
         """특정 SystemInfo 객체 수정
         Raises:
             exceptions.ParseError: request 데이터가 맞지 않을 때
@@ -183,7 +183,7 @@ class SystemInfoDetail(APIView):
             status=status.HTTP_200_OK,
         )
 
-    def delete(self, request, pk: int):
+    def delete(self, request, pk):
         """특정 SystemInfo 객체 삭제
 
         Returns:
@@ -203,7 +203,7 @@ class DialogueDetail(APIView):
 
     permission_classes = [IsAuthenticated]
 
-    def get_object(self, pk: int):
+    def get_object(self, pk):
         """
         Raises:
             exceptions.NotFound: pk값에 맞는 객체가 없을 때
@@ -216,7 +216,7 @@ class DialogueDetail(APIView):
         except:
             raise exceptions.NotFound("Not Found System Information")
 
-    def get(self, request, pk: int):
+    def get(self, request, pk):
         """ChatGPT에게 전달할 다이얼로그 스크립트 요청 처리 함수
 
         Returns:
@@ -303,9 +303,16 @@ class DialogueDetail(APIView):
 
 
 class CreateRefBook(APIView):
+    """RefBook(참조 서적) 생성 APIView"""
+
     permission_classes = [IsAuthenticated]
 
     def post(self, request):
+        """RefBook 생성 요청 처리 함수
+
+        Returns:
+            Response: 생성 처리 상태 반환
+        """
         serializer = serializers.CreateRefBookSerializer(data=request.data)
         if serializer.is_valid():
             serializer.save(user=request.user)
@@ -318,9 +325,20 @@ class CreateRefBook(APIView):
 
 
 class RefBooksList(APIView):
+    """RefBook(참조 서적) 리스트 APIView"""
+
     permission_classes = [IsAuthenticated]
 
     def get(self, request):
+        """RefBook 리스트 요청 처리 함수
+
+        Parameters:
+            queryset (RefBook): 유저가 가진 RefBook 객체
+            paginated_ref_books (RefBook): 페이지네이션 처리된 RefBook 객체
+
+        Returns:
+            Response: RefBook 데이터 반환
+        """
         queryset = RefBook.objects.filter(user=request.user)
         pagination = PageNumberPagination()
         paginated_ref_books = pagination.paginate_queryset(
@@ -340,15 +358,33 @@ class RefBooksList(APIView):
 
 
 class RefBookDetail(APIView):
+    """특정 RefBook 객체 APIView
+
+    Common Args:
+        pk (int): RefBook 객체의 pk값
+    """
+
     permission_classes = [IsAuthenticated]
 
     def get_object(self, pk):
+        """pk값에 맞는 RefBook 객체 반환
+        Raises:
+            exceptions.NotFound: pk값에 맞는 객체가 없을 때
+
+        Returns:
+            SystemInfo : pk값에 맞는 RefBook 객체 반환
+        """
         try:
             return RefBook.objects.get(pk=pk)
         except:
             raise exceptions.NotFound()
 
     def put(self, request, pk):
+        """pk값에 맞는 RefBook 객체 수정
+
+        Returns:
+            Response: RefBook 객체 수정 상태 반환
+        """
         ref_book = self.get_object(pk)
         serializer = serializers.CreateRefBookSerializer(
             ref_book,
@@ -365,15 +401,27 @@ class RefBookDetail(APIView):
             )
 
     def delete(self, request, pk):
+        """pk값에 맞는 RefBook 객체 삭제
+
+        Returns:
+            Response: RefBook 객체 삭제 상태 반환
+        """
         ref_book = self.get_object(pk)
         ref_book.delete()
         return Response(status=status.HTTP_204_NO_CONTENT)
 
 
 class CreateRefData(APIView):
+    """RefBook(참조 서적) 생성 APIView"""
+
     permission_classes = [IsAuthenticated]
 
     def post(self, request):
+        """RefBook 생성 요청 처리 함수
+
+        Returns:
+            Response: 생성 처리 상태 반환
+        """
         ref_data_serializer = serializers.CreateRefDataSerializer(data=request.data)
         content_serializer = serializers.RefDataContentSerializer(data=request.data)
 
@@ -395,9 +443,20 @@ class CreateRefData(APIView):
 
 
 class RefDatasList(APIView):
+    """RefBook(참조 서적) 리스트 APIView"""
+
     permission_classes = [IsAuthenticated]
 
     def get(self, request):
+        """RefData 리스트 요청 처리 함수
+
+        Parameters:
+            queryset (RefData): 유저가 가진 RefData 객체
+            paginated_ref_datas (RefData): 페이지네이션 처리된 RefData 객체
+
+        Returns:
+            Response: RefData 데이터 반환
+        """
         queryset = RefData.objects.filter(user=request.user)
         pagination = PageNumberPagination()
         paginated_ref_datas = pagination.paginate_queryset(
@@ -417,15 +476,33 @@ class RefDatasList(APIView):
 
 
 class RefDataDetail(APIView):
+    """특정 RefBook 객체 APIView
+
+    Common Args:
+        pk (int): RefData 객체의 pk값
+    """
+
     permission_classes = [IsAuthenticated]
 
     def get_object(self, pk):
+        """pk값에 맞는 RefData 객체 반환
+        Raises:
+            exceptions.NotFound: pk값에 맞는 객체가 없을 때
+
+        Returns:
+            RefData : pk값에 맞는 RefData 객체 반환
+        """
         try:
             return RefData.objects.get(pk=pk)
         except:
             raise exceptions.NotFound()
 
     def put(self, request, pk):
+        """pk값에 맞는 RefData 객체 수정
+
+        Returns:
+            Response: RefData 객체 수정 상태 반환
+        """
         ref_data = self.get_object(pk)
         ref_data_serializer = serializers.RefDataListSerializer(
             ref_data,
@@ -454,6 +531,11 @@ class RefDataDetail(APIView):
         return Response(status=status.HTTP_200_OK)
 
     def delete(self, request, pk):
+        """pk값에 맞는 RefData 객체 삭제
+
+        Returns:
+            Response: RefData 객체 삭제 상태 반환
+        """
         ref_data = self.get_object(pk)
         ref_data.delete()
         return Response(status=status.HTTP_204_NO_CONTENT)
