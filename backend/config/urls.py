@@ -23,4 +23,5 @@ urlpatterns = [
     path("api/v1/gpt-sys-infos/", include("gpt_sys_infos.urls")),
     path("api/v1/chatrooms/", include("chatrooms.urls")),
     path("api/v1/dialogues/", include("dialogues.urls")),
+    path("api/v1/public-scripts/", include("public_scripts.urls")),
 ]
