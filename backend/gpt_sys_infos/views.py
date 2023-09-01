@@ -68,7 +68,7 @@ class CreateSystemInfo(APIView):
                     except:
                         raise exceptions.ParseError(f"참조 {related_model.__name__} 에러")
 
-            return Response(status=status.HTTP_201_CREATED)
+        return Response(status=status.HTTP_201_CREATED)
 
 
 class SystemInfosList(APIView):
@@ -104,16 +104,34 @@ class SystemInfosList(APIView):
 
 
 class SystemInfoDetail(APIView):
+    """특정 SystemInfo 데이터 APIView
+    Common Args:
+        pk (int): SystemInfo 객체의 pk값
+
+    """
+
     permission_classes = [IsAuthenticated]
 
-    def get_object(self, pk):
+    def get_object(self, pk: int) -> SystemInfo:
+        """
+        Raises:
+            exceptions.NotFound: pk값에 맞는 객체가 없을 때
+
+        Returns:
+            SystemInfo : pk값에 맞는 SystemInfo 객체 반환
+        """
         try:
             system_info = SystemInfo.objects.get(pk=pk)
             return system_info
         except:
             raise exceptions.NotFound()
 
-    def get(self, request, pk):
+    def get(self, request, pk: int):
+        """특정 SystemInfo 객체 반환
+
+        Returns:
+            Response : 객체 데이터, 상태 반환
+        """
         system_info = self.get_object(pk)
         serializer = serializers.SystemInfoDetailSerializer(system_info)
         return Response(
@@ -121,7 +139,14 @@ class SystemInfoDetail(APIView):
             status=status.HTTP_200_OK,
         )
 
-    def put(self, request, pk):
+    def put(self, request, pk: int):
+        """특정 SystemInfo 객체 수정
+        Raises:
+            exceptions.ParseError: request 데이터가 맞지 않을 때
+
+        Returns:
+            Response : 수정된 데이터, 상태 반환
+        """
         system_info = self.get_object(pk)
 
         serializer = serializers.CreateSystemInfoSerializer(
@@ -130,12 +155,12 @@ class SystemInfoDetail(APIView):
             partial=True,
         )
         if not serializer.is_valid():
-            print(serializer.errors)
             return Response(
                 serializer.errors,
                 status=status.HTTP_400_BAD_REQUEST,
             )
 
+        # 로직 설명은 CreateSystemInfo.post함수 참고
         with transaction.atomic():
             update_system_info = serializer.save()
             for field_name in ["ref_books_pk", "ref_datas_pk"]:
@@ -158,29 +183,70 @@ class SystemInfoDetail(APIView):
             status=status.HTTP_200_OK,
         )
 
-    def delete(self, request, pk):
+    def delete(self, request, pk: int):
+        """특정 SystemInfo 객체 삭제
+
+        Returns:
+            Response : 상태 반환
+        """
         system_info = self.get_object(pk)
         system_info.delete()
         return Response(status=status.HTTP_204_NO_CONTENT)
 
 
 class DialogueDetail(APIView):
+    """ChatGPT에게 전달할 다이얼로그 스크립트 생성 APIView
+
+    Common Args:
+        pk (int): SystemInfo 객체의 pk값
+    """
+
     permission_classes = [IsAuthenticated]
 
-    def get_object(self, pk):
+    def get_object(self, pk: int):
+        """
+        Raises:
+            exceptions.NotFound: pk값에 맞는 객체가 없을 때
+
+        Returns:
+            SystemInfo : pk값에 맞는 SystemInfo 객체 반환
+        """
         try:
             return SystemInfo.objects.get(pk=pk)
         except:
             raise exceptions.NotFound("Not Found System Information")
 
-    def get(self, request, pk):
+    def get(self, request, pk: int):
+        """ChatGPT에게 전달할 다이얼로그 스크립트 요청 처리 함수
+
+        Returns:
+            Response : 다이얼로그를 담은 리스트 데이터 반환
+        """
         system_info = self.get_object(pk)
         serializer = serializers.SystemInfoDetailSerializer(system_info)
         dialogues = self.generate_dialogue(system_info=serializer.data)
 
         return Response(dialogues, status=status.HTTP_200_OK)
 
-    def generate_dialogue(self, system_info):
+    def generate_dialogue(self, system_info: dict):
+        """스크립트 다이얼로그 생성 함수
+
+        Args:
+            system_info (dict): SystemInfoDetailSerializer 직렬화
+
+        Parameters:
+            level (dict): 대학교 학년에 따른 명칭 딕셔너리
+            language (str): ChatGPT 사용 언어
+            major (str): 질문 전공
+            understanding_level (int): 답변 수준
+            only_use_reference_data (bool): 참조 데이터 위주 답변 유무
+            ref_books (list[int]): 참조할 RefBook 객체 pk 리스트
+            ref_datas (list[int]): 참조할 RefData 객체 pk 리스트
+
+        Returns:
+            dialogue_list (list): 다이얼로그 스크립트 리스트
+        """
+
         level = {
             1: "freshman",
             2: "sophomore",
