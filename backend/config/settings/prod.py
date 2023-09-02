@@ -3,7 +3,6 @@ from .base import *
 DEBUG = False
 
 ALLOWED_HOSTS = [
-    "0.0.0.0",
     "127.0.0.1",
     "localhost",
     "ecs-alb-1087560193.ap-northeast-2.elb.amazonaws.com",

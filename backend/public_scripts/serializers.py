@@ -18,3 +18,18 @@ class CreateScriptSerializer(ModelSerializer):
             "number",
             "text",
         )
+
+
+class PublicScriptsListSerializer(ModelSerializer):
+    scripts = SerializerMethodField()
+
+    class Meta:
+        model = PublicScript
+        fields = (
+            "name",
+            "description",
+            "scripts",
+        )
+
+    def get_scripts(self, obj: PublicScript) -> list:
+        return [script.text for script in obj.scripts.all().order_by("number")]

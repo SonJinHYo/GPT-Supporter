@@ -2,17 +2,12 @@ from rest_framework.views import APIView
 from rest_framework import status
 from rest_framework import exceptions
 from rest_framework.response import Response
-from django.contrib.auth import authenticate
-from rest_framework.permissions import IsAuthenticated
 
-from django.conf import settings
 from django.db import transaction
 
-from users.models import User
+from .models import PublicScript
 
 from . import serializers
-
-import jwt
 
 
 class CreatePublicScript(APIView):
@@ -58,3 +53,17 @@ class CreatePublicScript(APIView):
                 {"message": "서버 문제로 공용 스크립트 생성에 실패했습니다"},
                 status=status.HTTP_500_INTERNAL_SERVER_ERROR,
             )
+
+
+class PublicScriptList(APIView):
+    """공용 스크립트 리스트 APIView"""
+
+    def get(self, request):
+        serializer = serializers.PublicScriptsListSerializer(
+            PublicScript.objects.all(),
+            many=True,
+        )
+        return Response(
+            serializer.data,
+            status=status.HTTP_200_OK,
+        )
