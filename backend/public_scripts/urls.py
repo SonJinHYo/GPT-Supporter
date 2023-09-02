@@ -1,4 +1,6 @@
 from django.urls import path
 from . import views
 
-urlpatterns = []
+urlpatterns = [
+    path("create", views.CreatePublicScript.as_view(), name="public-script-create"),
+]

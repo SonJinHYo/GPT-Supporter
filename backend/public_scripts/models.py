@@ -5,10 +5,18 @@ from django.core.validators import MaxValueValidator
 class PublicScript(models.Model):
     """공용 스크립트 모델"""
 
+    user = models.ForeignKey(
+        "users.User",
+        on_delete=models.SET_NULL,
+        null=True,
+        related_name="user",
+    )
+
     name = models.CharField(
         max_length=100,
         verbose_name="공용 스크립트 이름",
     )
+
     description = models.TextField(
         verbose_name="공용 스크립트 설명서",
         help_text="스크립트를 ChatGPT에게 전했을 때 효과, 이후 사용법 등 설명",
