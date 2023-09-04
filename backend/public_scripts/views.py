@@ -67,3 +67,16 @@ class PublicScriptList(APIView):
             serializer.data,
             status=status.HTTP_200_OK,
         )
+
+
+class PublicScriptDetail(APIView):
+    def get_object(self, pk):
+        try:
+            return PublicScript.objects.get(pk=pk)
+        except:
+            return exceptions.NotFound("존재하지 않는 PublicScript 객체입니다.")
+
+    def get(self, request, pk):
+        public_script = self.get_object(pk)
+        serializer = serializers.PublicScriptDetailSerializer(public_script)
+        return Response(serializer.data, status=status.HTTP_200_OK)

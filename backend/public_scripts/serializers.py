@@ -20,22 +20,6 @@ class CreateScriptSerializer(ModelSerializer):
         )
 
 
-class PublicScriptDetail(ModelSerializer):
-    scripts = SerializerMethodField()
-
-    class Meta:
-        model = PublicScript
-        fields = (
-            "pk",
-            "name",
-            "description",
-            "scripts",
-        )
-
-    def get_scripts(self, obj: PublicScript) -> list:
-        return [script.text for script in obj.scripts.all().order_by("number")]
-
-
 class PublicScriptsListSerializer(ModelSerializer):
     description_summary = SerializerMethodField()
 
@@ -53,3 +37,19 @@ class PublicScriptsListSerializer(ModelSerializer):
             if len(obj.description) < 400
             else obj.description[:400] + "..."
         )
+
+
+class PublicScriptDetailSerializer(ModelSerializer):
+    scripts = SerializerMethodField()
+
+    class Meta:
+        model = PublicScript
+        fields = (
+            "pk",
+            "name",
+            "description",
+            "scripts",
+        )
+
+    def get_scripts(self, obj: PublicScript) -> list:
+        return [script.text for script in obj.scripts.all().order_by("number")]
