@@ -38,8 +38,22 @@ interface ICreateChatroomVariables {
   systemInfoPk: number;
 }
 
+interface ICreatePublicScriptVariables {
+  name: string;
+  description: string;
+  scriptList: string[];
+}
+
+interface IScriptVariables {
+  number: number;
+  text: string;
+}
+
 const instance = axios.create({
-  baseURL: "http://ecs-alb-1087560193.ap-northeast-2.elb.amazonaws.com/api/v1/",
+  baseURL:
+    process.env.NODE_ENV === "development"
+      ? "http://127.0.0.1:8000/api/v1/"
+      : "https://gpt-supporter.click/api/v1/",
   withCredentials: true,
 });
 
@@ -86,8 +100,10 @@ export const signIn = ({ username, password }: ISignInVariables) =>
       localStorage.setItem("jwt", token);
     });
 
-export const getMe = () =>
-  instance.get(`users/me`).then((response) => response.data);
+export const getMe = () => {
+  console.log(process.env.REACT_APP_CREATE_PUBLIC_SCRIPT_URL);
+  return instance.get(`users/me`).then((response) => response.data);
+};
 
 export const getRefBooks = () =>
   instance.get(`gpt-sys-infos/refbook`).then((response) => response.data);
@@ -221,3 +237,30 @@ export const deleteChatroom = (chatroomPk: number) =>
       },
     })
     .then((response) => response.status);
+
+export const getPublicScripts = () =>
+  instance.get(`public-scripts/`).then((response) => response.data);
+
+export const getPublicScriptDetail = (publicScriptPk: number) =>
+  instance
+    .get(`public-scripts/${publicScriptPk}`)
+    .then((response) => response.data);
+
+export const createPublicScript = ({
+  name,
+  description,
+  scriptList,
+}: ICreatePublicScriptVariables) => {
+  const jsonScriptList = JSON.stringify(scriptList);
+  return instance
+    .post(
+      `public-scripts/create`,
+      { name, description, scriptList: jsonScriptList },
+      {
+        headers: {
+          "X-CSRFToken": Cookie.get("csrftoken") || "",
+        },
+      }
+    )
+    .then((response) => response.data);
+};
