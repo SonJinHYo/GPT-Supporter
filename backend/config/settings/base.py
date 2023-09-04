@@ -154,7 +154,7 @@ CORS_ALLOW_HEADERS = [
     "authorization",
     "content-type",
     "jwt",  # 허용할 헤더에 jwt 추가
-    " x-csrftoken",
+    "x-csrftoken",
 ]
 CORS_ALLOW_CREDENTIALS = True
 
