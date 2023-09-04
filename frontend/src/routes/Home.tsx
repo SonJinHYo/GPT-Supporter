@@ -61,9 +61,7 @@ export default function Home() {
               <Image
                 p="0.5"
                 bg="whiteAlpha.900"
-                src={`https://github.com/SonJinHYo/image_repo/blob/main/image_server/my-gpt-${
-                  index + 1
-                }.png?raw=true`}
+                src={`/images/my-gpt-${index + 1}.png?raw=true`}
               />
             </VStack>
           ))}
