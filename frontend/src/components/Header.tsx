@@ -4,8 +4,10 @@ import {
   FaFileAlt,
   FaCreativeCommonsShare,
 } from "react-icons/fa";
+
+import { TbMessageStar } from "react-icons/tb";
+
 import { RiOpenaiFill } from "react-icons/ri";
-import { BsChatLeft } from "react-icons/bs";
 import {
   Box,
   Button,
@@ -78,7 +80,7 @@ export default function Header() {
           </Tooltip>
         </Link>
         <Link to={"/system-info"}>
-          <Tooltip label="gpt 사전 설정">
+          <Tooltip label="스크립트 생성 데이터">
             <IconButton
               aria-label={"system-info"}
               icon={<RiOpenaiFill size="24" />}
@@ -87,22 +89,22 @@ export default function Header() {
             />
           </Tooltip>
         </Link>
-        {/* <Link to={"chatrooms"}> */}
-        <Tooltip label="채팅방(미완)">
-          <IconButton
-            isDisabled
-            aria-label={"Ref-Books"}
-            icon={<BsChatLeft size="24" />}
-            variant="ghost"
-            alignSelf="flex-end"
-          />
-        </Tooltip>
-        {/* </Link> */}
+        <Box></Box>
         <Link to={"public-scripts"}>
           <Tooltip label="공용 스크립트">
             <IconButton
               aria-label={"Ref-Books"}
               icon={<FaCreativeCommonsShare size="24" />}
+              variant="ghost"
+              alignSelf="flex-end"
+            />
+          </Tooltip>
+        </Link>
+        <Link to={"tip"}>
+          <Tooltip label="Chat GPTip!">
+            <IconButton
+              aria-label={"Ref-Books"}
+              icon={<TbMessageStar size="24" />}
               variant="ghost"
               alignSelf="flex-end"
             />

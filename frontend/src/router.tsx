@@ -10,6 +10,7 @@ import PublicScripts from "./routes/PublicScripts";
 import RefBooks from "./routes/RefBooks";
 import RefData from "./routes/RefData";
 import SystemInfo from "./routes/systemInfo";
+import TipPage from "./routes/TipPage";
 import WebSocketChat from "./routes/WebSocketChat";
 
 const router = createBrowserRouter([
@@ -57,6 +58,10 @@ const router = createBrowserRouter([
       {
         path: process.env.REACT_APP_CREATE_PUBLIC_SCRIPT_URL,
         element: <CreatePublicScript />,
+      },
+      {
+        path: "tip",
+        element: <TipPage />,
       },
     ],
   },
