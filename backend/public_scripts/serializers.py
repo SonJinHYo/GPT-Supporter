@@ -34,8 +34,8 @@ class PublicScriptsListSerializer(ModelSerializer):
     def get_description_summary(self, obj: PublicScript) -> list:
         return (
             obj.description
-            if len(obj.description) < 400
-            else obj.description[:400] + "..."
+            if len(obj.description) < 100
+            else obj.description[:100] + "..."
         )
 
 

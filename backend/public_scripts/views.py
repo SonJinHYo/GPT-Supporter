@@ -1,3 +1,4 @@
+import json
 from rest_framework.views import APIView
 from rest_framework import status
 from rest_framework import exceptions
@@ -24,7 +25,7 @@ class CreatePublicScript(APIView):
             data=request.data
         )
 
-        script_list = request.data["scriptList"]
+        script_list = json.loads(request.data["scriptList"])
 
         if not public_script_serializer.is_valid():
             raise exceptions.ParseError("공용 스크립트 생성 실패. 스크립트 이름 및 설명을 확인하세요.")
@@ -34,10 +35,17 @@ class CreatePublicScript(APIView):
                 new_public_script_serializer = public_script_serializer.save(
                     user=request.user
                 )
-
-                for script in script_list:
-                    script_serializer = serializers.CreateScriptSerializer(data=script)
+                print(script_list)
+                for idx, script in enumerate(script_list, start=1):
+                    print(idx, script)
+                    script_serializer = serializers.CreateScriptSerializer(
+                        data={
+                            "number": idx,
+                            "text": script,
+                        }
+                    )
                     if not script_serializer.is_valid():
+                        print(script_serializer.data)
                         return Response(
                             script_serializer.errors,
                             status=status.HTTP_400_BAD_REQUEST,
