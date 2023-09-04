@@ -4,7 +4,7 @@ services:
     container_name: django
     build:
       context: ./backend
-      dockerfile: local_Dockerfile
+      dockerfile: Dockerfile.local
     ports:
       - "8000:8000"
     environment:
