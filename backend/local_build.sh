@@ -4,10 +4,6 @@
 python3 manage.py makemigrations --settings=config.settings.local
 python3 manage.py migrate --settings=config.settings.local 
 
-USERNAME=$USERNAME
-PASSWORD=$PASSWORD
-EMAIL=$EMAIL
-
 # Django Superuser 생성
 python3 manage.py shell --settings=config.settings.local <<EOF
 from users.models import User
