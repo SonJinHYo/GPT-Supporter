@@ -100,10 +100,8 @@ export const signIn = ({ username, password }: ISignInVariables) =>
       localStorage.setItem("jwt", token);
     });
 
-export const getMe = () => {
-  console.log(process.env.REACT_APP_CREATE_PUBLIC_SCRIPT_URL);
-  return instance.get(`users/me`).then((response) => response.data);
-};
+export const getMe = () =>
+  instance.get(`users/me`).then((response) => response.data);
 
 export const getRefBooks = () =>
   instance.get(`gpt-sys-infos/refbook`).then((response) => response.data);
