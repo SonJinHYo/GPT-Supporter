@@ -3,9 +3,7 @@ from .base import *
 DEBUG = False
 
 ALLOWED_HOSTS = [
-    "127.0.0.1",
-    "localhost",
-    "ecs-alb-1087560193.ap-northeast-2.elb.amazonaws.com",
+    "gpt-supporter.click",
 ]
 
 WSGI_APPLICATION = "config.wsgi.prod.application"
@@ -25,12 +23,8 @@ DATABASES = {
 }
 
 CORS_ALLOWED_ORIGINS = [
-    "http://127.0.0.1:3000",
-    "http://127.0.0.1",
-    "http://ecs-alb-1087560193.ap-northeast-2.elb.amazonaws.com",
+    "https://gpt-supporter.click",
 ]
 CSRF_TRUSTED_ORIGINS = [
-    "http://127.0.0.1:3000",
-    "http://127.0.0.1",
-    "http://ecs-alb-1087560193.ap-northeast-2.elb.amazonaws.com",
+    "https://gpt-supporter.click",
 ]
