@@ -1,4 +1,9 @@
-import { FaHome, FaBook, FaFileAlt } from "react-icons/fa";
+import {
+  FaHome,
+  FaBook,
+  FaFileAlt,
+  FaCreativeCommonsShare,
+} from "react-icons/fa";
 import { RiOpenaiFill } from "react-icons/ri";
 import { BsChatLeft } from "react-icons/bs";
 import {
@@ -93,6 +98,16 @@ export default function Header() {
           />
         </Tooltip>
         {/* </Link> */}
+        <Link to={"public-scripts"}>
+          <Tooltip label="공용 스크립트">
+            <IconButton
+              aria-label={"Ref-Books"}
+              icon={<FaCreativeCommonsShare size="24" />}
+              variant="ghost"
+              alignSelf="flex-end"
+            />
+          </Tooltip>
+        </Link>
       </HStack>
       <HStack spacing={2}>
         {/* <IconButton
