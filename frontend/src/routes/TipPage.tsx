@@ -41,7 +41,7 @@ export default function TipPage() {
       {/* 페르소나 패턴 */}
       <Box mb={6}>
         <Heading as="h2" fontSize="3xl" mb={2}>
-          페르소나 패턴
+          The Persona pattern
         </Heading>
         <Text whiteSpace="pre-line" p="10" lineHeight="10">
           {
@@ -57,7 +57,7 @@ export default function TipPage() {
       {/* 레시피 패턴 */}
       <Box mb={6}>
         <Heading as="h2" fontSize="3xl" mb={2}>
-          레시피 패턴
+          The Recipe Pattern
         </Heading>
         <Text whiteSpace="pre-line" p="10">
           {
@@ -76,7 +76,7 @@ export default function TipPage() {
       {/* 리플렉션 패턴 */}
       <Box mb={6}>
         <Heading as="h2" fontSize="3xl" mb={2}>
-          리플렉션 패턴
+          The Reflection pattern
         </Heading>
         <Text whiteSpace="pre-line" p="10">
           {
@@ -85,7 +85,7 @@ export default function TipPage() {
           선택한 사항이 있다면 해당 사항에 대해 설명하며 잠재적인 제한 사항이나 엣지 케이스를 설명합니다."\n\n\
           이 방법은 특히 대학생에게 유용하다고 생각합니다. 전공 지식은 당연하고 전공이 아니더라도 이제 정보의 신뢰성에 대해 생각해야 하고\
            스스로 인터넷의 정보를 판단할 수 있는 능력을 키울 시점이니까요.\n\n\
-           단순히 "Chat GPT답변 든든하다~" 하고 넘기기보단 어떤 방식으로 답변과 근거를 서술하고 전개해나가는지 배울 점이 많습니다!\n(당연히 모든 답변이 그런건 아니지만요)'
+           단순히 "Chat GPT답변 든든하다~" 하고 넘기기보단 어떤 방식으로 답변과 근거를 서술하고 전개해나가는지 배울 점이 많습니다!'
           }
         </Text>
       </Box>
@@ -93,7 +93,7 @@ export default function TipPage() {
       {/* 거부 차단기 패턴 */}
       <Box mb={6}>
         <Heading as="h2" fontSize="3xl" mb={2}>
-          거부 차단기 패턴
+          The Refusal Beraker Pattern
         </Heading>
         <Text whiteSpace="pre-line" p="10">
           {
@@ -109,7 +109,7 @@ export default function TipPage() {
       {/* 뒤집힌 상호작용 패턴 */}
       <Box mb={6}>
         <Heading as="h2" fontSize="3xl" mb={2}>
-          뒤집힌 상호작용 패턴
+          The Flipped Interaction Pattern
         </Heading>
         <Text whiteSpace="pre-line" p="10">
           {
