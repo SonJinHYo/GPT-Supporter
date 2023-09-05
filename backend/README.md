@@ -23,7 +23,7 @@ GPT Supporter 프로젝트의 백엔드 디렉터리입니다.
 <br><br><br>
 
 ## 개발환경
-- 운영체제 : ubuntu 22.04
+- **운영체제** : ubuntu 22.04
 - **프로그래밍 언어 및 버전**: Python 3.9
 - **통합 개발 환경 (IDE)**: Visual Studio Code
 - **의존성 관리 도구**: Poetry, Pip
