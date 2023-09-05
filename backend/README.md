@@ -32,8 +32,44 @@ ERD 주소 : https://dbdiagram.io/d/64f40e4c02bd1c4a5edd927d
   - Docker (컨테이너화)
   - AWS RDS (관계형 데이터베이스 서비스)
 
+## API명세서
+| URL                                    | Method      | 기능                              |
+| -------------------------------------- | ----------- | --------------------------------- |
+| users/signup                           | POST        | 회원가입                          |
+| users/signin                           | POST        | 로그인                            |
+| users/me                               | GET         | 개인정보 조회 및 로그인 상태 갱신 |
+| gpt-sys-infos?page=                    | GET         | ChatGPT 설정 리스트 요청          |
+| gpt-sys-infos/create                   | POST        | ChatGPT 설정 생성                 |
+| gpt-sys-infos/\<int:pk\>               | PUT, DELETE | 특정 ChatGPT 설정 수정 및 삭제    |
+| gpt-sys-infos/refbook?page=            | GET         | 참고서적 리스트 요청              |
+| gpt-sys-infos/refbook/create           | POST        | 참고서적 설정 생성                |
+| gpt-sys-infos/gpt-sys-infos/\<int:pk\> | PUT, DELETE | 특정 참고서적 설정 수정 및 삭제   |
+| gpt-sys-infos/refdata?page=            | GET         | 참조자료 설정 리스트 요청         |
+| gpt-sys-infos/refdata                  | POST        | 참조자료 설정 생성                |
+| gpt-sys-infos/refdata/\<int:pk\>       | PUT, DELETE | 특정 참조자료 설정 수정 및 삭제   |
+| gpt-sys-infos/\<int:pk\>/dialogues     | GET         | 특정 ChatGPT 설정 스크립트 요청   |
+| public-script/                         | GET         | 공용 스크립트 생성                |
+| public-script/create                   | POST        | ChatGPT 설정 생성                 |
+
+자세한 API명세서 정보 : https://documenter.getpostman.com/view/23787123/2s9YBxXaie
 
 
+## 기술스택
 
+- 프로그래밍 언어 : Python 3.9
+- 웹 프레임워크: Django (gunicorn):
+  - Django 웹 프레임워크와 gunicorn 웹 서버를 활용하여 API의 핵심 로직과 웹 요청을 처리합니다. Django의 강력한 기능을 통해 안정적인 웹 애플리케이션을 개발할 수 있습니다.
+- 데이터베이스: MySQL (AWS RDS)
+  - MySQL 데이터베이스는 AWS RDS(Relational Database Service)를 통해 호스팅되며, 데이터 저장 및 관리에 사용됩니다. 안정성과 확장성을 위해 AWS의 관리형 데이터베이스 서비스를 선택하였습니다.
+- 보안 및 인증: ACM (AWS Certificate Manager), AFM (AWS Firewall Manager), AWS Shield
+  - AWS Certificate Manager를 사용하여 SSL/TLS 인증서를 관리하고, AWS Firewall Manager 및 AWS Shield를 통해 API 보안과 DDoS 공격 방어를 강화하였습니다.
+- 클라우드 플랫폼: AWS ECS (Elastic Container Service)
+  - AWS ECS를 통해 API 컨테이너화 및 관리를 수행합니다. 
+- 버전 관리: Git
+  - Git 버전 관리 시스템을 사용하여 API 코드의 버전 관리와 협업을 지원합니다.
+- 도구 및 서비스: Docker, Postman, Nginx
+  - Docker 컨테이너 기술을 사용하여 개발 환경을 구축 및 배포를 위한 컨테이너를 제공합니다.
+  - Postman은 API 테스트 및 문서화를 위해 활용했습니다.
+  - Nginx 웹 서버는 API 리버스 프록시 및 부하 분산을 위해 사용됩니다. React 앱의 build파일을 가지고 모든 정적파일을 제공합니다.
 
 
