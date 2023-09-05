@@ -8,7 +8,9 @@ ChatGPT에게 질문하는 방식에만 변화를 주어도 성능 향상이 잘
 사용자(대학생)의 정보와 몇가지 데이터를 저장해두면 ChatGPT에게 사용자의 정보를 효율적으로 전달하는 템플릿을 제공합니다.  
 
 <br>
+
 [웹사이트 바로가기](https://gpt-supporter.click)
+
 <br><br>
 
 ## Architecture
