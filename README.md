@@ -1,5 +1,7 @@
 # GPT-Supporter
 
+개발 기간 : 2023-08 ~
+
 ## Intro
 
 ChatGPT를 보다 잘 사용하게 도와주는 웹사이트입니다.  
