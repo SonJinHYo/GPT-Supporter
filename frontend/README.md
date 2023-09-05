@@ -6,7 +6,7 @@ GPT Supporter는 ChatGPT 기술을 대학생들에게 접근성 있게 제공하
 ## 기술 스택
 - React
 - Node.js
- -Chakra UI
+- Chakra UI
 
 ## 기능 및 화면
 - 현재 서비스중인 웹사이트 입니다. ![웹사이트 바로가기] (https://gpt-supporter.click)
