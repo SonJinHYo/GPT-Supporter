@@ -11,7 +11,8 @@ ChatGPT에게 질문하는 방식에만 변화를 주어도 성능 향상이 잘
 
 ## Architecture
 
-![](https://github.com/SonJinHYo/image_repo/blob/main/image_server/gpt-supporter-architecture.png?raw=true)
+![image](https://github.com/SonJinHYo/GPT-Supporter/assets/88013439/a15072cd-c194-4e20-9743-6e66e8fbcc12)
+
 
 - nginx에서 정적 파일을 모두 처리하도록 react의 build 폴더를 nginx 컨테이너로 복사했습니다.
   - ALB에서 http 80포트, https 443포트를 리슨하고 nginx로 로드밸런싱 합니다.
