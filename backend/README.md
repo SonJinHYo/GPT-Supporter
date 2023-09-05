@@ -1,8 +1,8 @@
 # GPT Supoorter Backend  
 
-GPT Supporter 프로젝트의 백엔드 폴더입니다.
+GPT Supporter 프로젝트의 백엔드 디렉터리입니다.
 각 필드별로 CRUD 구현을 중점으로 RestfulAPI를 구현했습니다.
-
+<br><br><br>
 ## ERD
 
 ![](https://github.com/SonJinHYo/image_repo/blob/main/image_server/Untitled.png?raw=true)
@@ -15,8 +15,10 @@ ERD 주소 : https://dbdiagram.io/d/64f40e4c02bd1c4a5edd927d
 - SystemInfo : 유저가 저장한 정보 객체입니다. 필드값을 토대로 ChatGPT에게 사용자의 정보를 최적의 방식으로 전달할 수 있는 스크립트를 제공하도록 만든 모델입니다.
 - PublicScript: 관리자 유저가 다루는 공용 스크립트 객체입니다.
   - Script: PublicScript에서 스크립트 필드입니다. 스크립트 순서를 number로 저장합니다.
+<br>
+**코드의 `Chatrooms.models`,` Dialogues.models`는 사용하진 않았고 구현만 되어있는 부분입니다. 향후 스크립트의 내용이 많아질 경우 사용할 예정입니다.** 
 
-- 코드의 `Chatrooms.models`,` Dialogues.models`는 사용하진 않았고 구현만 되어있는 부분입니다. 향후 스크립트의 내용이 많아질 경우 사용할 예정입니다.
+<br><br><br>
 
 ## 개발환경
 - **프로그래밍 언어 및 버전:** Python 3.9
@@ -31,6 +33,8 @@ ERD 주소 : https://dbdiagram.io/d/64f40e4c02bd1c4a5edd927d
   - AWS ECS, ELB, CloudWatch, Docker-compose (컨테이너 관리)
   - Docker (컨테이너화)
   - AWS RDS (관계형 데이터베이스 서비스)
+
+<br><br><br>
 
 ## API명세서
 | URL                                    | Method      | 기능                              |
@@ -53,23 +57,30 @@ ERD 주소 : https://dbdiagram.io/d/64f40e4c02bd1c4a5edd927d
 
 자세한 API명세서 정보 : https://documenter.getpostman.com/view/23787123/2s9YBxXaie
 
-
+<br><br><br>
 ## 기술스택
 
 - 프로그래밍 언어 : Python 3.9
 - 웹 프레임워크: Django (gunicorn):
   - Django 웹 프레임워크와 gunicorn 웹 서버를 활용하여 API의 핵심 로직과 웹 요청을 처리합니다. Django의 강력한 기능을 통해 안정적인 웹 애플리케이션을 개발할 수 있습니다.
 - 데이터베이스: MySQL (AWS RDS)
-  - MySQL 데이터베이스는 AWS RDS(Relational Database Service)를 통해 호스팅되며, 데이터 저장 및 관리에 사용됩니다. 안정성과 확장성을 위해 AWS의 관리형 데이터베이스 서비스를 선택하였습니다.
+  - MySQL 데이터베이스는 AWS RDS(Relational Database Service)를 통해 호스팅이 됩니다.
+  - ECS cluster와 같은 VPC내에서 django와 직접 소통합니다.
 - 보안 및 인증: ACM (AWS Certificate Manager), AFM (AWS Firewall Manager), AWS Shield
-  - AWS Certificate Manager를 사용하여 SSL/TLS 인증서를 관리하고, AWS Firewall Manager 및 AWS Shield를 통해 API 보안과 DDoS 공격 방어를 강화하였습니다.
+  - AWS Certificate Manager를 사용하여 SSL/TLS 인증서를 관리합니다.
+  - AWS Firewall Manager 및 AWS Shield를 통해 sql문 주입, DDoS 공격 등의 API 보안을 합니다.
 - 클라우드 플랫폼: AWS ECS (Elastic Container Service)
   - AWS ECS를 통해 API 컨테이너화 및 관리를 수행합니다. 
 - 버전 관리: Git
-  - Git 버전 관리 시스템을 사용하여 API 코드의 버전 관리와 협업을 지원합니다.
+  - Git 버전 관리 시스템을 사용하여 API 코드의 버전 관리를 합니다.
 - 도구 및 서비스: Docker, Postman, Nginx
   - Docker 컨테이너 기술을 사용하여 개발 환경을 구축 및 배포를 위한 컨테이너를 제공합니다.
   - Postman은 API 테스트 및 문서화를 위해 활용했습니다.
   - Nginx 웹 서버는 API 리버스 프록시 및 부하 분산을 위해 사용됩니다. React 앱의 build파일을 가지고 모든 정적파일을 제공합니다.
 
+<br><br><br>
+## 향후 업데이트 사항.
 
+1. Redis 캐시 서버 적용 (컨테이너 or AWS Redis)
+2. 텍스트 데이터 분석 API 개발 - 여러 사용 예제 거들기
+3. public-script 유닛테스트 코드 추가
