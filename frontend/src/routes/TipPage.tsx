@@ -1,63 +1,59 @@
-import {
-  Box,
-  Center,
-  Heading,
-  HStack,
-  Text,
-  VStack,
-  Image,
-} from "@chakra-ui/react";
+import { Box, Heading, Text, VStack, Image, Divider } from "@chakra-ui/react";
 
 export default function TipPage() {
-  const sequence = [
-    "계정 생성, 로그인 후 상단의 책 버튼을 눌러 사용하는 책의 제목과 저자를 저장합니다. (로그인에 필요한 정보는 username, password입니다)",
-    "책 버튼의 바로 옆에 있는 문서 버튼을 눌러 사용하는 텍스트 자료를 설정합니다. (ex. 강의에서 제공하는 자료)",
-    "이어서 옆에 있는 ChatGPT 아이콘을 눌러 ChatGPT에게 전할 정보를 설정합니다.",
-    "추가가 완료되면 마찬가지로 설정된 정보를 담은 카드가 생성됩니다. 'Get Scripts'를 누르면 템플릿이 생성됩니다.",
-  ];
-  const last_sequence = [
-    "스크립트가 생성된 모습입니다! ChatGPT로 이동해서 순서대로 대화를 붙여넣으면 됩니다.",
-    "ChatGPT는 같은 말을 다르게 해석하는 경우도 있습니다. 좋을 때도 있고 나쁠 때도 있습니다. 지금은 일관성있게 초기 설정을 전달해야하니 번역의 실수가 없도록 영어로 전달을 합니다.",
-    "갑자기 한글이 나와도 괜찮고, ChatGPT가 중간에 의도하지 않은 말을 해도 괜찮습니다. ChatGPT는 대화 목록 전체를 참고하기 때문에 설정이 이어지면서 교정이 될 수 있습니다.",
-    "마지막까지 전하고나서 채팅을 시작하면 됩니다! ChatGPT에게 추가적인 설정을 원한다면 생성된 템플릿에 원하는대로 덧붙여 설정하면 됩니다.",
-  ];
   return (
-    <VStack p="20" align="flex-start" fontSize="lg" lineHeight="10">
-      <Heading as="h1" fontSize="5xl" mb={4}>
+    <VStack p="20" align="flex-start" fontSize="lg" lineHeight="8">
+      <Heading as="h1" fontSize="4xl" mb={4}>
         ChatGPT 질문 Tip
       </Heading>
       <Text mb={4} whiteSpace="pre-line" p="10">
         {
-          "Chat GPT를 사용하기 전에 나의 질문을 받기 최적의 상태로 세팅하는 방식입니다.\n\
-          여기서는 세팅이 아닌 질문 자체를 좀 더 잘하는 방법입니다.\n\n\
-          Chat GPT가 없는 것을 만들어내거나 질문의 요점에 벗어나지 않고 성능을 잘 낼 수 있는 방식으로\n\
+          "GPT Supporter의 서비스는 Chat GPT를 사용하기 전에 나의 질문을 받기 최적의 상태로 세팅하는 방식입니다.\n\
+          하지만 여기서는 세팅이 아닌 세팅 이후의 질문 자체를 좀 더 잘하는 방법입니다.\n\n\
+          Chat GPT가 없는 것을 만들어내거나 질문의 요점에 벗어나지 않고, 본래의 성능을 잘 낼 수 있는 질문 방식으로\n\
           'A Prompt Pattern Catalog to Enhance Prompt Engineering with ChatGPT' 이라는 논문에서 소개한 방식입니다.\n\n\
           \
           아래에서는 논문에서 제시한 다섯 가지 질문 패턴입니다. 이러한 패턴을 활용하여 \
-          ChatGPT와의 상호작용을 향상시킬 수 있습니다."
+          ChatGPT와의 상호작용을 향상시킬 수 있습니다. \n(다섯 가지 방법 중 상황에 맞게 하나만 적용해도 충분합니다)"
         }
       </Text>
+      <Divider my="5" />
 
       {/* 페르소나 패턴 */}
       <Box mb={6}>
-        <Heading as="h2" fontSize="3xl" mb={2}>
-          The Persona pattern
+        <Heading as="h2" fontSize="2xl" mb={2}>
+          The Persona pattern (페르소나 패턴)
         </Heading>
         <Text whiteSpace="pre-line" p="10" lineHeight="10">
           {
             '특정 인물이나 역할을 가정하고 질문에 답하는 방식입니다. 예를 들어,\n\n\
-          "당신은 지금부터 짧은 퀴즈를 내는 교수 역할입니다. 내가 알려주는 자료에서 교수로서 학생들의 시험에 낼 만한 부분을\
-           찾아 10개 내외로 퀴즈를 만들어주세요."\n\n\
+            "당신은 지금부터 짧은 퀴즈를 내는 교수 역할입니다. 내가 알려주는 자료에서 교수로서 학생들의 시험에 낼 만한 부분을\
+            찾아 10개 내외로 퀴즈를 만들어주세요."\n\n\
           와 같은 방식으로 지정된 역할을 수행하여 답변합니다.\n\n\
           이런 역할을 부여할 때는 말투, 긍정적인 태도, 엄격한 판단 등의 요소를 부여할 수도 있습니다.'
           }
         </Text>
+        <Image
+          p="0.5"
+          bg="whiteAlpha.900"
+          src={`/images/Q1.png`}
+          mb="2"
+          ml="10"
+          w="600px"
+        />
+        <Image
+          p="0.5"
+          bg="whiteAlpha.900"
+          src={`/images/A1.png`}
+          w="600px"
+          ml="10"
+        />
       </Box>
-
+      <Divider my="5" />
       {/* 레시피 패턴 */}
       <Box mb={6}>
         <Heading as="h2" fontSize="3xl" mb={2}>
-          The Recipe Pattern
+          The Recipe Pattern (레시피 패턴)
         </Heading>
         <Text whiteSpace="pre-line" p="10">
           {
@@ -71,12 +67,21 @@ export default function TipPage() {
              스스로 어떤 답변을 원하는지 모르는 상태로 질문을 하면 질문할수록 늪에 빠지는 상황이 나올 수 있기 때문입니다.'
           }
         </Text>
+        <Image
+          p="0.5"
+          bg="whiteAlpha.900"
+          src={`/images/QA2.png`}
+          mb="2"
+          ml="10"
+          w="600px"
+        />
       </Box>
+      <Divider my="5" />
 
       {/* 리플렉션 패턴 */}
       <Box mb={6}>
         <Heading as="h2" fontSize="3xl" mb={2}>
-          The Reflection pattern
+          The Reflection pattern (리플렉션 패턴)
         </Heading>
         <Text whiteSpace="pre-line" p="10">
           {
@@ -88,38 +93,64 @@ export default function TipPage() {
            단순히 "Chat GPT답변 든든하다~" 하고 넘기기보단 어떤 방식으로 답변과 근거를 서술하고 전개해나가는지 배울 점이 많습니다!'
           }
         </Text>
+        <Image
+          p="0.5"
+          bg="whiteAlpha.900"
+          src={`/images/QA3.png`}
+          mb="2"
+          ml="10"
+          w="600px"
+        />
       </Box>
+      <Divider my="5" />
 
       {/* 거부 차단기 패턴 */}
       <Box mb={6}>
         <Heading as="h2" fontSize="3xl" mb={2}>
-          The Refusal Beraker Pattern
+          The Refusal Beraker Pattern (거부 방지 패턴)
         </Heading>
         <Text whiteSpace="pre-line" p="10">
           {
             "ChatGPT가 일단 답변을 꺼내도록 하는 방법입니다. 예를 들어,\n\n\
-          답변할 수 없을 때마다 그 이유를 자세히 설명해주세요. \
-          그리고 이유를 피할 수 있는 대안을 반드시 하나 이상 제시하고 어떻게 대안이 나오게된 근거를 얘기합니다.\n\n\
+          '저의 질문에 답변할 수 없을 때마다 그 이유를 자세히 설명해주세요. \
+          그리고 이유를 피할 수 있는 대안을 반드시 하나 이상 제시하고 어떻게 대안이 나오게된 근거를 얘기합니다.'\n\n\
           해당 방법은 다양한 의견이나 아이디어가 필요한 상황에서 사용할수록 좋습니다.\n\
           다만 공부를 하거나 어떤 명확한 정보가 필요한 상황에선 오히려 독이 될 가능성이 있습니다."
           }
         </Text>
+        <Image
+          p="0.5"
+          bg="whiteAlpha.900"
+          src={`/images/QA4.png`}
+          mb="2"
+          ml="10"
+          w="600px"
+        />
       </Box>
+      <Divider my="5" />
 
       {/* 뒤집힌 상호작용 패턴 */}
       <Box mb={6}>
         <Heading as="h2" fontSize="3xl" mb={2}>
-          The Flipped Interaction Pattern
+          The Flipped Interaction Pattern (역 상호작용 패턴)
         </Heading>
         <Text whiteSpace="pre-line" p="10">
           {
             'ChatGPT가 원하는 것을 달성할 때까지 역으로 질문하도록 하는 방식입니다.\n\
-            쉽게 말하자면 Chat GPT가 나에게 스무고개 한다고 생각할 수 있습니다. 예를 들어, \n\n\
-            "유명한 영화를 골라서 감상문을 2000자 내외로 작성해야 합니다. 이를 위해 필요한 질문을 나에게 하세요.\
-            그리고 모든 정보를 얻으면 영화감상문을 작성해주세요."\n\n\
+            내가 원하는 답변을 만드는데 필요한 정보를 묻는것이 아닌 답변을 만들기위해 필요한 질문을 받는 방법입니다. 예를 들어, \n\n\
+            "유명한 영화를 골라서 감상문을 2000자 내외로 작성해야 합니다. 작성하기 위해 필요한 정보는 나에게 물어보세요.\n\
+            모든 정보를 얻었다면 영화감상문을 작성해주세요."\n\n\
             와 같이 ChatGPT가 역으로 질문을 하며 필요한 정보를 얻습니다. 개인적으로 이 방법은 사용할수록 더 잘 이용할 수 있게 되는것 같습니다.'
           }
         </Text>
+        <Image
+          p="0.5"
+          bg="whiteAlpha.900"
+          src={`/images/QA5.png`}
+          mb="2"
+          ml="10"
+          w="600px"
+        />
       </Box>
     </VStack>
   );

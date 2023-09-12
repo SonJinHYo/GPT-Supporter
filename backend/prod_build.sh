@@ -4,7 +4,7 @@
 python3 manage.py makemigrations --settings=config.settings.prod
 python3 manage.py migrate --settings=config.settings.prod
 
-python3 manage.py shell --settings=config.settings.local <<EOF
+python3 manage.py shell --settings=config.settings.prod <<EOF
 from users.models import User
  
 # 이미 존재하는 사용자 확인

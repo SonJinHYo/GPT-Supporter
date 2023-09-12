@@ -30,6 +30,8 @@ interface IPublicScriptVariables {
 export default function PublicScripts() {
   const nav = useNavigate();
 
+  const [publicScriptPk, setPublicScriptPk] = useState(0);
+
   const { isLoading, data, isError, error } = useQuery<
     IPublicScriptVariables[]
   >(["public-scripts"], getPublicScripts);
@@ -72,16 +74,24 @@ export default function PublicScripts() {
               </CardBody>
             </CardHeader>
             <CardFooter>
-              <Button onClick={onOpen}> View Here</Button>
+              <Button
+                onClick={() => {
+                  onOpen();
+                  setPublicScriptPk(publicScript.pk);
+                }}
+              >
+                {" "}
+                View Here
+              </Button>
             </CardFooter>
-            <PublicScriptModal
-              isOpen={isOpen}
-              onClose={onClose}
-              publicScriptPk={publicScript.pk}
-            />
           </Card>
         ))}
       </SimpleGrid>
+      <PublicScriptModal
+        isOpen={isOpen}
+        onClose={onClose}
+        publicScriptPk={publicScriptPk}
+      />
     </VStack>
   );
 }
