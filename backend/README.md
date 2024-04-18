@@ -83,8 +83,3 @@ GPT Supporter 프로젝트의 백엔드 디렉터리입니다.
   - Postman은 API 테스트 및 문서화를 위해 활용했습니다.
   - Nginx 웹 서버는 API 리버스 프록시 및 부하 분산을 위해 사용됩니다. React 앱의 build파일을 가지고 모든 정적파일을 제공합니다.
 <br><br><br>
-## 향후 업데이트 사항.
-
-1. Redis 캐시 서버 적용 (컨테이너 or AWS Redis)
-2. 텍스트 데이터 분석 API 개발 - 여러 사용 예제 거들기
-3. public-script 유닛테스트 코드 추가
