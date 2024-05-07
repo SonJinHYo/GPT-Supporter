@@ -16,7 +16,7 @@ ChatGPT에게 질문하는 방식에만 변화를 주어도 성능 향상이 잘
 
 <br>
 
-[웹사이트 바로가기](https://gpt-supporter.click)
+~~[웹사이트 바로가기](https://gpt-supporter.click)~~ (서비스 종료)
 
 <br><br>
 
